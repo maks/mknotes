@@ -1,6 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
-void main() {
+import 'note.dart';
+
+Stream<Note> _readNotesFileList() {
+  final notesDir = Directory('/home/maks/notes');
+
+  final notesListStream = notesDir.list();
+
+  return notesListStream.map((f) {
+    print("note p: ${f.absolute.path}");
+    return Note(name: f.absolute.path, content: '');
+  });
+}
+
+void main() async {
   runApp(MyApp());
 }
 
@@ -20,36 +35,49 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   final String title;
 
   MainPage({@required this.title});
 
   @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  final itemList = <Note>[];
+  final notesStream = _readNotesFileList();
+
+  @override
   Widget build(BuildContext context) {
+    itemList.clear();
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
       ),
       body: Center(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              width: 300,
-              color: Colors.lightBlueAccent,
-              child: ListView(
-                children: [
-                  Text(
-                    'Item 1',
-                  ),
-                  Text(
-                    'Item 2',
-                  ),
-                ],
-              ),
-            ),
+            StreamBuilder<Note>(
+                stream: notesStream,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return CircularProgressIndicator();
+                  }
+                  itemList.add(snapshot.data);
+                  print("item: ${snapshot.data}");
+                  return Container(
+                    width: 300,
+                    color: Colors.lightBlueAccent,
+                    child: ListView.builder(
+                        itemCount: itemList.length,
+                        itemBuilder: (BuildContext ctx, int index) {
+                          return Text(itemList[index].name);
+                        }),
+                  );
+                }),
             Expanded(
               flex: 1,
               child: Column(
