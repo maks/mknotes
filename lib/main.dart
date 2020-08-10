@@ -1,19 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:maksnotes/bl/localdir_note_store.dart';
 
-import 'note.dart';
-
-Stream<Note> _readNotesFileList() {
-  final notesDir = Directory('/home/maks/notes');
-
-  final notesListStream = notesDir.list();
-
-  return notesListStream.map((f) {
-    print("note p: ${f.absolute.path}");
-    return Note(name: f.absolute.path, content: '');
-  });
-}
+import 'bl/note.dart';
 
 void main() async {
   runApp(MyApp());
@@ -45,12 +33,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final itemList = <Note>[];
-  final notesStream = _readNotesFileList();
+  final notesStream = LocalDirNoteStore(path: '/home/maks/notes').notes;
 
   @override
   Widget build(BuildContext context) {
-    itemList.clear();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -60,14 +46,13 @@ class _MainPageState extends State<MainPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            StreamBuilder<Note>(
+            StreamBuilder<List<Note>>(
                 stream: notesStream,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return CircularProgressIndicator();
                   }
-                  itemList.add(snapshot.data);
-                  print("item: ${snapshot.data}");
+                  final itemList = snapshot.data;
                   return Container(
                     width: 300,
                     color: Colors.lightBlueAccent,
