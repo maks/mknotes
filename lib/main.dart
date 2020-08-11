@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:maksnotes/bl/localdir_note_store.dart';
 
@@ -33,7 +35,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final notesStream = LocalDirNoteStore(path: '/home/maks/notes').notes;
+  final notesStream =
+      LocalDirNoteStore(notesDir: Directory('/home/maks/notes')).notes;
 
   @override
   Widget build(BuildContext context) {
