@@ -19,8 +19,19 @@ class LocalDirNoteStore implements NoteStore {
     return notesListStream
         .asyncMap((f) async => Note(
               filename: path.basenameWithoutExtension(f.absolute.path),
-              content: await (f as File).readAsString(),
+              content: await _safeReadFile(f as File),
             ))
         .scan((accumulated, value, index) => accumulated..add(value), []);
+  }
+
+  Future<String> _safeReadFile(File f) async {
+    var result;
+    try {
+      result = await f?.readAsString();
+    } catch (e) {
+      print('error reading file $f: $e');
+      result = '';
+    }
+    return result;
   }
 }
