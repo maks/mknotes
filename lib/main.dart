@@ -19,6 +19,9 @@ class MyApp extends StatelessWidget {
       title: appName,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
+        primaryColor: Colors.lightBlue[800],
+        accentColor: Colors.cyan[600],
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MainPage(title: appName),
@@ -60,12 +63,16 @@ class _MainPageState extends State<MainPage> {
                   itemList = snapshot.data;
                   return Container(
                     width: 300,
-                    color: Colors.lightBlueAccent,
-                    child: ListView.builder(
+                    color: Theme.of(context).backgroundColor,
+                    child: ListView.separated(
                         itemCount: itemList.length,
+                        separatorBuilder: (context, index) => Divider(
+                              color: Colors.black,
+                            ),
                         itemBuilder: (BuildContext ctx, int index) {
-                          return GestureDetector(
-                            child: Text(itemList[index].name),
+                          return ListTile(
+                            title: Text(itemList[index].name),
+                            dense: true,
                             onTap: () => _showNote(index),
                           );
                         }),
@@ -74,7 +81,10 @@ class _MainPageState extends State<MainPage> {
             Expanded(
               flex: 1,
               child: SingleChildScrollView(
-                child: Text(itemList?.elementAt(_current)?.content ?? ''),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(itemList?.elementAt(_current)?.content ?? ''),
+                ),
               ),
             ),
           ],
