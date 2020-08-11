@@ -73,11 +73,8 @@ class _MainPageState extends State<MainPage> {
                 }),
             Expanded(
               flex: 1,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(itemList?.elementAt(_current)?.content ?? ''),
-                ],
+              child: SingleChildScrollView(
+                child: Text(itemList?.elementAt(_current)?.content ?? ''),
               ),
             ),
           ],
