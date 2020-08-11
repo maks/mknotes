@@ -18,7 +18,7 @@ class LocalDirNoteStore implements NoteStore {
 
     return notesListStream
         .asyncMap((f) async => Note(
-              name: path.basenameWithoutExtension(f.absolute.path),
+              filename: path.basenameWithoutExtension(f.absolute.path),
               content: await (f as File).readAsString(),
             ))
         .scan((accumulated, value, index) => accumulated..add(value), []);
