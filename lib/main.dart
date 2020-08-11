@@ -35,8 +35,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final notesStream =
-      LocalDirNoteStore(notesDir: Directory('/home/maks/notes')).notes;
+  final notesStream = LocalDirNoteStore(notesDir: Directory('./docs')).notes;
 
   @override
   Widget build(BuildContext context) {
