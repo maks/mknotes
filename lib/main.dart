@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:maksnotes/bl/localdir_note_store.dart';
 
 import 'bl/note.dart';
+import 'bl/note_store.dart';
 
 void main() async {
   runApp(MyApp());
@@ -35,7 +36,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final notesStream = LocalDirNoteStore(notesDir: Directory('./docs')).notes;
+  final NoteStore _noteStore = LocalDirNoteStore(notesDir: Directory('./docs'));
+  int _current;
+  List<Note> itemList;
 
   @override
   Widget build(BuildContext context) {
@@ -49,19 +52,22 @@ class _MainPageState extends State<MainPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             StreamBuilder<List<Note>>(
-                stream: notesStream,
+                stream: _noteStore.notes,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return CircularProgressIndicator();
                   }
-                  final itemList = snapshot.data;
+                  itemList = snapshot.data;
                   return Container(
                     width: 300,
                     color: Colors.lightBlueAccent,
                     child: ListView.builder(
                         itemCount: itemList.length,
                         itemBuilder: (BuildContext ctx, int index) {
-                          return Text(itemList[index].name);
+                          return GestureDetector(
+                            child: Text(itemList[index].name),
+                            onTap: () => _showNote(index),
+                          );
                         }),
                   );
                 }),
@@ -70,9 +76,7 @@ class _MainPageState extends State<MainPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                  ),
+                  Text(itemList?.elementAt(_current)?.content ?? ''),
                 ],
               ),
             ),
@@ -89,5 +93,12 @@ class _MainPageState extends State<MainPage> {
 
   void _addNote() {
     print('Add Note');
+  }
+
+  void _showNote(int index) {
+    print('SHOW: $index');
+    setState(() {
+      _current = index;
+    });
   }
 }
