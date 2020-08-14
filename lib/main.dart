@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:maksnotes/bl/localdir_note_store.dart';
+import 'package:maksnotes/ui/list_widget.dart';
 
 import 'bl/note.dart';
 import 'bl/note_store.dart';
+import 'ui/note_widget.dart';
 
 void main() async {
   runApp(MyApp());
@@ -40,53 +42,21 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final NoteStore _noteStore = LocalDirNoteStore(notesDir: Directory('./docs'));
-  int _current;
-  List<Note> itemList;
+  Note _current;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(_current?.name ?? widget.title),
       ),
       body: Center(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            StreamBuilder<List<Note>>(
-                stream: _noteStore.notes,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return CircularProgressIndicator();
-                  }
-                  itemList = snapshot.data;
-                  return Container(
-                    width: 300,
-                    color: Theme.of(context).backgroundColor,
-                    child: ListView.separated(
-                        itemCount: itemList.length,
-                        separatorBuilder: (context, index) => Divider(
-                              color: Colors.black,
-                            ),
-                        itemBuilder: (BuildContext ctx, int index) {
-                          return ListTile(
-                            title: Text(itemList[index].name),
-                            dense: true,
-                            onTap: () => _showNote(index),
-                          );
-                        }),
-                  );
-                }),
-            Expanded(
-              flex: 1,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(itemList?.elementAt(_current)?.content ?? ''),
-                ),
-              ),
-            ),
+            NoteList(_noteStore.notes, _showNote),
+            NoteContent(_current?.content),
           ],
         ),
       ),
@@ -102,10 +72,10 @@ class _MainPageState extends State<MainPage> {
     print('Add Note');
   }
 
-  void _showNote(int index) {
-    print('SHOW: $index');
+  void _showNote(Note selected) {
+    print('SHOW: ${selected.toString().substring(0, 30)}');
     setState(() {
-      _current = index;
+      _current = selected;
     });
   }
 }

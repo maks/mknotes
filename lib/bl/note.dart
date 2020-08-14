@@ -6,7 +6,7 @@ class Note {
   final String content;
   final List<String> tags;
 
-  get name => title ?? filename.replaceAll(RegExp('_'), ' ');
+  String get name => title ?? filename.replaceAll(RegExp('_'), ' ');
 
   Note({
     @required this.filename,
