@@ -43,15 +43,15 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final NoteStore _noteStore = LocalDirNoteStore(notesDir: Directory('./docs'));
-  Note _current;
+  final appState = AppState();
 
   @override
   Widget build(BuildContext context) {
-    return Provider.value(
-      value: _current,
+    return ChangeNotifierProvider.value(
+      value: appState,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_current?.name ?? widget.title),
+          title: Text(appState.current?.name ?? widget.title),
         ),
         body: Center(
           child: Row(
@@ -79,7 +79,18 @@ class _MainPageState extends State<MainPage> {
   void _showNote(Note selected) {
     print('SHOW: ${selected.toString().substring(0, 30)}');
     setState(() {
-      _current = selected;
+      appState.current = selected;
     });
+  }
+}
+
+class AppState extends ChangeNotifier {
+  Note _current;
+
+  get current => _current;
+
+  set current(Note n) {
+    _current = n;
+    notifyListeners();
   }
 }

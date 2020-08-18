@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:maksnotes/bl/note.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:provider/provider.dart';
+
+import '../main.dart';
 
 /// Otherwise, <mark> indicates a portion of the document's content which
 /// is likely to be relevant to the user's current activity. This might be used,
@@ -49,7 +50,7 @@ class _NoteContentState extends State<NoteContent> {
             onChanged: _update,
           )
         : MarkdownBody(
-            data: Provider.of<Note>(context)?.content ?? '',
+            data: Provider.of<AppState>(context).current?.content ?? '',
             builders: {MARK_TAG: MarkBuilder(Theme.of(context).accentColor)},
             extensionSet: md.ExtensionSet(
               [const md.FencedCodeBlockSyntax()],
