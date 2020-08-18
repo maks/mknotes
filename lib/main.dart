@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:maksnotes/bl/localdir_note_store.dart';
 import 'package:maksnotes/ui/list_widget.dart';
+import 'package:provider/provider.dart';
 
 import 'bl/note.dart';
 import 'bl/note_store.dart';
@@ -46,24 +47,27 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_current?.name ?? widget.title),
-      ),
-      body: Center(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            NoteList(_noteStore.notes, _showNote),
-            NoteContent(_current?.content),
-          ],
+    return Provider.value(
+      value: _current,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(_current?.name ?? widget.title),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addNote,
-        tooltip: 'Add note',
-        child: Icon(Icons.add),
+        body: Center(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              NoteList(_noteStore.notes, _showNote),
+              NoteContent(),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _addNote,
+          tooltip: 'Add note',
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }

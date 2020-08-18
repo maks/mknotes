@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:maksnotes/bl/note.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:provider/provider.dart';
 
 /// Otherwise, <mark> indicates a portion of the document's content which
 /// is likely to be relevant to the user's current activity. This might be used,
@@ -10,9 +12,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 const MARK_TAG = 'mark';
 
 class NoteContent extends StatefulWidget {
-  final String content;
-
-  NoteContent(this.content);
+  NoteContent();
 
   @override
   _NoteContentState createState() => _NoteContentState();
@@ -20,6 +20,13 @@ class NoteContent extends StatefulWidget {
 
 class _NoteContentState extends State<NoteContent> {
   bool _edit = false;
+  TextEditingController _editController;
+
+  @override
+  void initState() {
+    super.initState();
+    _editController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +43,13 @@ class _NoteContentState extends State<NoteContent> {
 
   Widget _contentWidget(BuildContext context) {
     return _edit
-        ? Text(widget.content ?? '')
+        ? TextField(
+            decoration: InputDecoration(border: InputBorder.none),
+            controller: _editController,
+            onChanged: _update,
+          )
         : MarkdownBody(
-            data: widget.content ?? '',
+            data: Provider.of<Note>(context)?.content ?? '',
             builders: {MARK_TAG: MarkBuilder(Theme.of(context).accentColor)},
             extensionSet: md.ExtensionSet(
               [const md.FencedCodeBlockSyntax()],
@@ -49,6 +60,10 @@ class _NoteContentState extends State<NoteContent> {
               ],
             ),
           );
+  }
+
+  void _update(String text) {
+    print('new text:$text');
   }
 }
 

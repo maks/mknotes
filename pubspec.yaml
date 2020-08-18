@@ -21,6 +21,7 @@ dependencies:
   path: ^1.7.0
   flutter_markdown: ^0.4.3
   markdown: ^2.1.7
+  provider: ^4.3.2
 
 dev_dependencies:
   flutter_test:
