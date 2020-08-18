@@ -21,23 +21,37 @@ class NoteContent extends StatefulWidget {
 
 class _NoteContentState extends State<NoteContent> {
   TextEditingController _editController;
+  AppState _appState;
 
   @override
   void initState() {
     super.initState();
     _editController = TextEditingController();
+    _editController.addListener(_update);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _appState = context.read<AppState>();
+    _editController.text = context.read<AppState>().current?.content ?? '';
+  }
+
+  @override
+  void dispose() {
+    _editController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
     return Expanded(
       flex: 1,
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: _contentWidget(
-              context, appState.current?.content ?? '', appState.edit),
+          child: _contentWidget(context,
+              context.watch<AppState>().current?.content ?? '', _appState.edit),
         ),
       ),
     );
@@ -48,7 +62,7 @@ class _NoteContentState extends State<NoteContent> {
         ? TextField(
             decoration: InputDecoration(border: InputBorder.none),
             controller: _editController,
-            onChanged: _update,
+            maxLines: null,
           )
         : MarkdownBody(
             data: content,
@@ -64,8 +78,11 @@ class _NoteContentState extends State<NoteContent> {
           );
   }
 
-  void _update(String text) {
-    print('new text:$text');
+  void _update() {
+    final currentContent = _editController.text;
+    if (currentContent != _appState.current?.content) {
+      _appState.updateCurrentContent(currentContent);
+    }
   }
 }
 
