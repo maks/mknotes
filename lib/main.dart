@@ -59,14 +59,20 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: appState,
-      child: Scaffold(
+      builder: (BuildContext context, _) => Scaffold(
         appBar: AppBar(
           title: Text(appState.current?.name ?? widget.title),
           actions: [
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: appState.toggleEdit,
-            ),
+            if (context.watch<AppState>().edit)
+              IconButton(
+                icon: Icon(Icons.save),
+                onPressed: appState.toggleEdit,
+              )
+            else
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: appState.toggleEdit,
+              )
           ],
         ),
         body: Center(
