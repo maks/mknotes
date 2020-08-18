@@ -52,6 +52,12 @@ class _MainPageState extends State<MainPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(appState.current?.name ?? widget.title),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: appState.toggleEdit,
+            ),
+          ],
         ),
         body: Center(
           child: Row(
@@ -86,11 +92,19 @@ class _MainPageState extends State<MainPage> {
 
 class AppState extends ChangeNotifier {
   Note _current;
+  bool _edit = false;
 
   get current => _current;
 
   set current(Note n) {
     _current = n;
+    notifyListeners();
+  }
+
+  get edit => _edit;
+
+  toggleEdit() {
+    _edit = !_edit;
     notifyListeners();
   }
 }

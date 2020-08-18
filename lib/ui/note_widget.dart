@@ -20,7 +20,6 @@ class NoteContent extends StatefulWidget {
 }
 
 class _NoteContentState extends State<NoteContent> {
-  bool _edit = false;
   TextEditingController _editController;
 
   @override
@@ -31,26 +30,28 @@ class _NoteContentState extends State<NoteContent> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Expanded(
       flex: 1,
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: _contentWidget(context),
+          child: _contentWidget(
+              context, appState.current?.content ?? '', appState.edit),
         ),
       ),
     );
   }
 
-  Widget _contentWidget(BuildContext context) {
-    return _edit
+  Widget _contentWidget(BuildContext context, String content, bool editing) {
+    return editing
         ? TextField(
             decoration: InputDecoration(border: InputBorder.none),
             controller: _editController,
             onChanged: _update,
           )
         : MarkdownBody(
-            data: Provider.of<AppState>(context).current?.content ?? '',
+            data: content,
             builders: {MARK_TAG: MarkBuilder(Theme.of(context).accentColor)},
             extensionSet: md.ExtensionSet(
               [const md.FencedCodeBlockSyntax()],
