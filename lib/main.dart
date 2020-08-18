@@ -43,8 +43,17 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final NoteStore _noteStore = LocalDirNoteStore(notesDir: Directory('./docs'));
-  final appState = AppState();
+  final NoteStore _noteStore;
+  final AppState appState;
+
+  // need to use factory constructor trick to initialise dependent finals
+  // ref: https://stackoverflow.com/a/52964776/85472
+  _MainPageState._(this._noteStore, this.appState);
+
+  factory _MainPageState() {
+    final store = LocalDirNoteStore(notesDir: Directory('./docs'));
+    return _MainPageState._(store, AppState(store));
+  }
 
   @override
   Widget build(BuildContext context) {

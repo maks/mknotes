@@ -1,1 +1,1 @@
-a test
+a test is a good thing.

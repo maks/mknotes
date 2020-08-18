@@ -18,7 +18,10 @@ class LocalDirNoteStore implements NoteStore {
 
     return notesListStream
         .asyncMap((f) async => Note(
-              filename: path.basenameWithoutExtension(f.absolute.path),
+              filename: path.basename(f.absolute.path),
+              title: path
+                  .basenameWithoutExtension(f.absolute.path)
+                  .replaceAll('_', ' '),
               content: await _safeReadFile(f as File),
             ))
         .scan((accumulated, value, index) => accumulated..add(value), []);
@@ -33,5 +36,10 @@ class LocalDirNoteStore implements NoteStore {
       result = '';
     }
     return result;
+  }
+
+  @override
+  void saveFile(String filename, String contents) {
+    File(path.join(notesDir.path, filename)).writeAsString(contents);
   }
 }
