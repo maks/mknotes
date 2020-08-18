@@ -5,6 +5,7 @@ import 'package:maksnotes/bl/localdir_note_store.dart';
 import 'package:maksnotes/ui/list_widget.dart';
 import 'package:provider/provider.dart';
 
+import 'bl/app_state.dart';
 import 'bl/note.dart';
 import 'bl/note_store.dart';
 import 'ui/note_widget.dart';
@@ -87,31 +88,5 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       appState.current = selected;
     });
-  }
-}
-
-class AppState extends ChangeNotifier {
-  Note _current;
-  bool _edit = false;
-
-  Note get current => _current;
-
-  set current(Note n) {
-    _current = n;
-    notifyListeners();
-  }
-
-  get edit => _edit;
-
-  toggleEdit() {
-    _edit = !_edit;
-    notifyListeners();
-  }
-
-  /// update WITHOUT notifying listeners, useful as textfields maintain their own
-  /// state of the text so we don't want to keep rebuilding them as the content is edited
-  /// due to them listening to changes to the app state
-  updateCurrentContent(String text) {
-    _current = _current.copyWith(content: text);
   }
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:maksnotes/bl/app_state.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:provider/provider.dart';
-
-import '../main.dart';
 
 /// Otherwise, <mark> indicates a portion of the document's content which
 /// is likely to be relevant to the user's current activity. This might be used,
