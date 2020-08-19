@@ -66,6 +66,7 @@ class _NoteContentState extends State<NoteContent> {
             decoration: InputDecoration(border: InputBorder.none),
             controller: _editController,
             maxLines: null,
+            keyboardType: TextInputType.multiline,
           )
         : MarkdownBody(
             data: content,
@@ -104,13 +105,10 @@ class SearchTermHighlight extends md.InlineSyntax {
         match[0].isEmpty ||
         (match.start > 0 &&
             match.input.substring(match.start - 1, match.start) == '/')) {
-      // Just use the original matched text.
-      parser.advanceBy(match[0].length);
-      return false;
+    } else {
+      print("MARK FOUND: ${match[0]}");
+      parser.addNode(md.Element.text(MARK_TAG, match[0]));
     }
-
-    print("MARK FOUND: ${match[0]}");
-    parser.addNode(md.Element.text(MARK_TAG, match[0]));
     return true;
   }
 }
