@@ -9,6 +9,7 @@ import 'bl/app_state.dart';
 import 'bl/note.dart';
 import 'bl/note_store.dart';
 import 'ui/note_widget.dart';
+import 'ui/search_widget.dart';
 
 void main() async {
   runApp(MyApp());
@@ -80,7 +81,12 @@ class _MainPageState extends State<MainPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              NoteList(_noteStore.notes, _showNote),
+              Column(
+                children: [
+                  SearchField(),
+                  Expanded(child: NoteList(_noteStore.notes, _showNote)),
+                ],
+              ),
               NoteContent(),
             ],
           ),
@@ -99,7 +105,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _showNote(Note selected) {
-    print('SHOW: ${selected.toString().substring(0, 30)}');
+    print('SHOW: ${selected.name}');
     setState(() {
       appState.current = selected;
     });
