@@ -74,7 +74,7 @@ class _NoteContentState extends State<NoteContent> {
               [const md.FencedCodeBlockSyntax()],
               [
                 if (searchTerm != null && searchTerm.isNotEmpty)
-                  SearchTermHighlight(searchTerm, term: searchTerm),
+                  SearchTermHighlight('$searchTerm'),
                 md.StrikethroughSyntax(),
                 md.EmojiSyntax(),
               ],
@@ -91,15 +91,17 @@ class _NoteContentState extends State<NoteContent> {
 }
 
 class SearchTermHighlight extends md.InlineSyntax {
-  final String term;
+  // we want to override the base classes regex to be case *IN*sensitive
+  final RegExp pattern;
 
-  SearchTermHighlight(String pattern, {this.term, int startCharacter})
-      : super(pattern, startCharacter: startCharacter);
+  SearchTermHighlight(String pattern, {int startCharacter})
+      : pattern = RegExp(pattern, multiLine: true, caseSensitive: false),
+        super(pattern, startCharacter: startCharacter);
 
   @override
   bool onMatch(md.InlineParser parser, Match match) {
-    if (term == null ||
-        term.isEmpty ||
+    if (match[0] == null ||
+        match[0].isEmpty ||
         (match.start > 0 &&
             match.input.substring(match.start - 1, match.start) == '/')) {
       // Just use the original matched text.
@@ -107,8 +109,8 @@ class SearchTermHighlight extends md.InlineSyntax {
       return false;
     }
 
-    print("FOUND: $term");
-    parser.addNode(md.Element.text(MARK_TAG, term));
+    print("MARK FOUND: ${match[0]}");
+    parser.addNode(md.Element.text(MARK_TAG, match[0]));
     return true;
   }
 }
