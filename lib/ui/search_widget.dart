@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:maksnotes/bl/app_state.dart';
+import 'package:provider/provider.dart';
 
 class SearchField extends StatelessWidget {
   @override
@@ -9,6 +11,7 @@ class SearchField extends StatelessWidget {
         autofocus: true,
         maxLines: 1,
         decoration: InputDecoration(hintText: 'search'),
+        onSubmitted: (text) => context.read<AppState>().search(text),
       ),
     );
   }

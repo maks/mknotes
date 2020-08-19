@@ -13,7 +13,6 @@ class SearchFilter implements Filter {
 
   @override
   bool apply(Note note) {
-    // TODO: implement apply
-    throw UnimplementedError();
+    return note.name.contains(term) || (note.content?.contains(term) ?? false);
   }
 }

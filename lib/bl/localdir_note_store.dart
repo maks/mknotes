@@ -11,8 +11,8 @@ import 'note_store.dart';
 /// Interface for Stores that provide access to notes.
 class LocalDirNoteStore implements NoteStore {
   final Directory notesDir;
-
   final _notesListStream = BehaviorSubject<List<Note>>();
+  List<Note> _fullList;
 
   LocalDirNoteStore({@required this.notesDir}) {
     final notesListStream = notesDir.list();
@@ -30,6 +30,7 @@ class LocalDirNoteStore implements NoteStore {
             (accumulated, value, index) => accumulated..add(value), []).forEach(
       (notes) {
         _notesListStream.add(notes);
+        _fullList = notes;
       },
     );
   }
@@ -53,7 +54,14 @@ class LocalDirNoteStore implements NoteStore {
   }
 
   @override
-  void filter(Filter searchFilter) {}
+  void filter(Filter filter) {
+    if (filter == null) {
+      _notesListStream.add(_fullList);
+    } else {
+      _notesListStream
+          .add(_fullList.where((note) => filter.apply(note)).toList());
+    }
+  }
 
   @override
   void dispose() {

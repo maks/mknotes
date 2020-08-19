@@ -7,8 +7,11 @@ class AppState extends ChangeNotifier {
   Note _current;
   bool _edit = false;
   final NoteStore store;
+  String _currentSearchTerm;
 
   Note get current => _current;
+
+  String get searchTerm => _currentSearchTerm;
 
   set current(Note n) {
     _current = n;
@@ -36,7 +39,8 @@ class AppState extends ChangeNotifier {
   }
 
   void search(String term) {
-    store.filter(SearchFilter(term));
+    _currentSearchTerm = term;
+    store.filter((term != null && term.isNotEmpty) ? SearchFilter(term) : null);
   }
 
   void _saveCurrent() {
