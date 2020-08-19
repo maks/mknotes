@@ -49,14 +49,18 @@ class _NoteContentState extends State<NoteContent> {
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: _contentWidget(context,
-              context.watch<AppState>().current?.content ?? '', _appState.edit),
+          child: _contentWidget(
+              context,
+              context.watch<AppState>().current?.content ?? '',
+              _appState.edit,
+              _appState.searchTerm),
         ),
       ),
     );
   }
 
-  Widget _contentWidget(BuildContext context, String content, bool editing) {
+  Widget _contentWidget(
+      BuildContext context, String content, bool editing, String searchTerm) {
     return editing
         ? TextField(
             decoration: InputDecoration(border: InputBorder.none),
@@ -69,7 +73,8 @@ class _NoteContentState extends State<NoteContent> {
             extensionSet: md.ExtensionSet(
               [const md.FencedCodeBlockSyntax()],
               [
-                SearchTermHighlight('title', term: 'title'),
+                if (searchTerm != null && searchTerm.isNotEmpty)
+                  SearchTermHighlight(searchTerm, term: searchTerm),
                 md.StrikethroughSyntax(),
                 md.EmojiSyntax(),
               ],
@@ -94,6 +99,7 @@ class SearchTermHighlight extends md.InlineSyntax {
   @override
   bool onMatch(md.InlineParser parser, Match match) {
     if (term == null ||
+        term.isEmpty ||
         (match.start > 0 &&
             match.input.substring(match.start - 1, match.start) == '/')) {
       // Just use the original matched text.
