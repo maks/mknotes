@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'filters.dart';
 import 'note.dart';
 import 'note_store.dart';
 
@@ -32,6 +33,10 @@ class AppState extends ChangeNotifier {
   /// due to them listening to changes to the app state
   updateCurrentContent(String text) {
     _current = _current.copyWith(content: text);
+  }
+
+  void search(String term) {
+    store.filter(SearchFilter(term));
   }
 
   void _saveCurrent() {
