@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maksnotes/bl/app_state.dart';
+import '../bl/app_state.dart';
 import 'package:provider/provider.dart';
 
 class SearchField extends StatelessWidget {

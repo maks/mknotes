@@ -1,4 +1,4 @@
-package com.example.maksnotes
+package com.manichord.mknotes
 
 import io.flutter.embedding.android.FlutterActivity
 

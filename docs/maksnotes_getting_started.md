@@ -1,12 +1,12 @@
 ## Meta
 
-I've going the document the process of building the maksnotes app, by actually writing it up as a series of notes that maksnotes app will eventually allow me to manage, along with all my existing notes.
+I've going the document the process of building the mknotes app, by actually writing it up as a series of notes that mknotes app will eventually allow me to manage, along with all my existing notes.
 
 I use a "sort of" [Zettelkasten](https://zettelkasten.de/posts/overview/)
 
 I'm going to be doing this on LInux, actually on most of my machines, its a Debian container inside ChromeOS.
 
-Until maksnotes can at least open and edit notes, I'll start of my editing them in VSCode.
+Until mknotes can at least open and edit notes, I'll start of my editing them in VSCode.
 
 ## First steps
 
@@ -53,4 +53,4 @@ So following the [Codelab](https://codelabs.developers.google.com/codelabs/flutt
 sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev
 ```
 
-Then `flutter create maksnotes` to create scaffold for the linux app.
+Then `flutter create mknotes` to create scaffold for the linux app.

@@ -1,3 +1,3 @@
-# maksnotes
+# mknotes
 
-A Flutter Zettelkasten method notebook
+My take on a Flutter Zettelkasten method notebook

@@ -1,5 +1,5 @@
-name: maksnotes
-description: A Flutter Zettelkasten method notebook
+name: mknotes
+description: My take on a Flutter Zettelkasten method notebook
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.

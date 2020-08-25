@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:maksnotes/bl/localdir_note_store.dart';
-import 'package:maksnotes/ui/list_widget.dart';
+import 'bl/localdir_note_store.dart';
+import 'ui/list_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'bl/app_state.dart';
@@ -16,7 +16,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final String appName = 'Maks Notes';
+  final String appName = 'MkNotes';
 
   @override
   Widget build(BuildContext context) {

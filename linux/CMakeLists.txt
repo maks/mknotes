@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "maksnotes")
-set(APPLICATION_ID "com.example.maksnotes")
+set(BINARY_NAME "mknotes")
+set(APPLICATION_ID "com.manichord.mknotes")
 
 cmake_policy(SET CMP0063 NEW)
 

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:maksnotes/bl/localdir_note_store.dart';
-import 'package:maksnotes/bl/note.dart';
+import 'package:mknotes/bl/localdir_note_store.dart';
+import 'package:mknotes/bl/note.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 

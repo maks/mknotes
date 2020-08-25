@@ -7,13 +7,13 @@
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:maksnotes/main.dart';
+import 'package:mknotes/main.dart';
 
 void main() {
   testWidgets('smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp());
 
-    expect(find.text('Maks Notes'), findsOneWidget);
+    expect(find.text('MkNotes'), findsOneWidget);
   });
 }

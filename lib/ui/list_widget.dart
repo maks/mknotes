@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maksnotes/bl/note.dart';
+import '../bl/note.dart';
 
 class NoteList extends StatelessWidget {
   final notesStream;
