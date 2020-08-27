@@ -17,13 +17,19 @@ class SplitScreen extends StatelessWidget {
     return Split(
       axis: Axis.horizontal,
       children: [
-        Column(
-          children: [
-            SearchField(),
-            Expanded(child: NoteList(noteStore.notes, showNote)),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(right: 2),
+          child: Column(
+            children: [
+              SearchField(),
+              Expanded(child: NoteList(noteStore.notes, showNote)),
+            ],
+          ),
         ),
-        NoteContent(),
+        Padding(
+          padding: const EdgeInsets.only(left: 8, top: 4, bottom: 4, right: 2),
+          child: NoteContent(),
+        ),
       ],
       initialFractions: [0.3, 0.7],
     );
