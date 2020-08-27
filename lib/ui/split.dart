@@ -300,42 +300,11 @@ class _SplitState extends State<Split> {
     @required double layoutWidth,
     @required double layoutHeight,
   }) {
-    final crossAxisSize = isHorizontal ? layoutHeight : layoutWidth;
-
-    // TODO(https://github.com/flutter/flutter/issues/43747): use an icon.
-    // The material icon for a drag handle is not currently available.
-    // For now, draw an indicator that is 3 lines running in the direction
-    // of the main axis, like a hamburger menu.
-    // TODO: use Icons.drag_handle
-    final defaultDragIndicator = Flex(
-      direction: isHorizontal ? Axis.vertical : Axis.horizontal,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (var i = 0; i < math.min(crossAxisSize / 6.0, 3).floor(); i++)
-          Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: isHorizontal ? 2.0 : 0.0,
-              horizontal: isHorizontal ? 0.0 : 2.0,
-            ),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Theme.of(context).dividerColor,
-                borderRadius: BorderRadius.circular(Split.defaultSplitterSize),
-              ),
-              child: SizedBox(
-                height: isHorizontal ? 2.0 : Split.defaultSplitterSize - 2.0,
-                width: isHorizontal ? Split.defaultSplitterSize - 2.0 : 2.0,
-              ),
-            ),
-          ),
-      ],
-    );
-
     return SizedBox(
       width: isHorizontal ? Split.defaultSplitterSize : layoutWidth,
       height: isHorizontal ? layoutHeight : Split.defaultSplitterSize,
       child: Center(
-        child: defaultDragIndicator,
+        child: Icon(Icons.drag_indicator),
       ),
     );
   }
