@@ -18,7 +18,6 @@ class NoteList extends StatelessWidget {
           }
           itemList = snapshot.data;
           return Container(
-            width: 300,
             color: Theme.of(context).backgroundColor,
             child: ListView.separated(
                 itemCount: itemList.length,

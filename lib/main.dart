@@ -1,15 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mknotes/ui/split_screen.dart';
 import 'bl/localdir_note_store.dart';
-import 'ui/list_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'bl/app_state.dart';
 import 'bl/note.dart';
 import 'bl/note_store.dart';
-import 'ui/note_widget.dart';
-import 'ui/search_widget.dart';
 
 void main() async {
   runApp(MyApp());
@@ -77,18 +75,9 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
         body: Center(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
-                children: [
-                  SearchField(),
-                  Expanded(child: NoteList(_noteStore.notes, _showNote)),
-                ],
-              ),
-              NoteContent(),
-            ],
+          child: SplitScreen(
+            noteStore: _noteStore,
+            showNote: _showNote,
           ),
         ),
         floatingActionButton: FloatingActionButton(
