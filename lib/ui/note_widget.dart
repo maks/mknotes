@@ -44,17 +44,14 @@ class _NoteContentState extends State<NoteContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _contentWidget(
-              context,
-              context.watch<AppState>().current?.content ?? '',
-              _appState.edit,
-              _appState.searchTerm),
-        ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: _contentWidget(
+            context,
+            context.watch<AppState>().current?.content ?? '',
+            _appState.edit,
+            _appState.searchTerm),
       ),
     );
   }
