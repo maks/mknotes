@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'dart:math' as math;
 
 class Note {
   final String filename;
@@ -14,6 +15,12 @@ class Note {
     this.title,
     this.tags = const <String>[],
   });
+
+  factory Note.fromContent(String content) {
+    final _title = _titleFromContent(content);
+    final _filename = _title.replaceAll(RegExp(' '), '_');
+    return Note(title: _title, filename: '$_filename.md', content: content);
+  }
 
   Note copyWith({
     String name,
@@ -31,4 +38,13 @@ class Note {
 
   @override
   String toString() => 'Note(name: $name, content: $content, tags: $tags)';
+
+  static String _titleFromContent(String content) {
+    final maxTitleLength = 20;
+    final title = content
+        .substring(0, math.min(maxTitleLength, content.length))
+        .replaceAll(RegExp(r'[.,!?\\-\\<>\[\]]'), '');
+    final newLinePosition = title.indexOf('\n');
+    return (newLinePosition > 0) ? title.substring(0, newLinePosition) : title;
+  }
 }
