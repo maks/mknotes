@@ -90,7 +90,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _addNote() {
-    print('Add Note');
+    appState.newNote();
   }
 
   void _showNote(Note selected) {

@@ -27,8 +27,7 @@ class AppState extends ChangeNotifier {
       // if we were currently editing, save file before existing edit mode
       _saveCurrent();
     }
-    _edit = !_edit;
-    notifyListeners();
+    _setEdit(!_edit);
   }
 
   /// update WITHOUT notifying listeners, useful as textfields maintain their own
@@ -41,6 +40,17 @@ class AppState extends ChangeNotifier {
   void search(String term) {
     _currentSearchTerm = term;
     store.filter((term != null && term.isNotEmpty) ? SearchFilter(term) : null);
+  }
+
+  void newNote() {
+    current = Note.fromContent('new note');
+    store.addNote(current);
+    _setEdit(true);
+  }
+
+  void _setEdit(bool edit) {
+    _edit = edit;
+    notifyListeners();
   }
 
   void _saveCurrent() {

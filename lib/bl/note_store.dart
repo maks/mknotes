@@ -5,6 +5,9 @@ import 'note.dart';
 abstract class NoteStore {
   Stream<List<Note>> get notes;
 
+  /// Add note to store
+  void addNote(Note note);
+
   /// Save note file with new contents
   void saveFile(String filename, String contents);
 

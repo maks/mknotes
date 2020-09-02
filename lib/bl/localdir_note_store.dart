@@ -67,4 +67,11 @@ class LocalDirNoteStore implements NoteStore {
   void dispose() {
     _notesListStream.close();
   }
+
+  @override
+  void addNote(Note note) {
+    _fullList.add(note);
+    // FIXME: need to change this as it will clear any filter being currently applied
+    _notesListStream.add(_fullList);
+  }
 }
