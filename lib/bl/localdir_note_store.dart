@@ -78,7 +78,7 @@ class LocalDirNoteStore implements NoteStore {
 
   @override
   void updateNote(Note old, Note nue) {
-    _fullList.remove((Note n) => n == old);
+    _fullList.remove(old);
     _fullList.add(nue);
     _notesListStream.add(_fullList);
   }

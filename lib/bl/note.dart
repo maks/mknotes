@@ -51,6 +51,22 @@ class Note {
   @override
   String toString() => 'Note(name: $name, content: $content, tags: $tags)';
 
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) {
+      return true;
+    }
+    return o is Note &&
+        o._title == _title &&
+        o._filename == _filename &&
+        o.content == content;
+  }
+
+  @override
+  int get hashCode {
+    return _title.hashCode ^ _filename.hashCode ^ content.hashCode;
+  }
+
   // enforce rules on what a title can be
   static String _titleFromText(String text) {
     final maxTitleLength = 80;
