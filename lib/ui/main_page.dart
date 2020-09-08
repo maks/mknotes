@@ -45,7 +45,12 @@ class _MainPageState extends State<MainPage> {
       value: appState,
       builder: (BuildContext context, _) => Scaffold(
         appBar: AppBar(
-          title: Text(appState.current?.name ?? widget.title),
+          title: NoteTitle(
+            title: (appState.current?.name ?? widget.title),
+            editable: context.watch<AppState>().edit,
+            onChanged: (text) =>
+                context.read<AppState>().updateCurrentTitle(text),
+          ),
           actions: [
             if (context.watch<AppState>().edit)
               IconButton(
@@ -88,5 +93,25 @@ class _MainPageState extends State<MainPage> {
   void _windowInfo() async {
     final window = await getWindowInfo();
     print("initial window size: ${window.frame}");
+  }
+}
+
+class NoteTitle extends StatelessWidget {
+  final String title;
+  final bool editable;
+  final void Function(String) onChanged;
+
+  const NoteTitle({Key key, this.editable, this.title, this.onChanged})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return editable
+        ? TextField(
+            maxLines: 1,
+            controller: TextEditingController()..text = title,
+            onChanged: onChanged,
+          )
+        : Text(title);
   }
 }

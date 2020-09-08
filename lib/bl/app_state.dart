@@ -39,6 +39,7 @@ class AppState extends ChangeNotifier {
 
   void updateCurrentTitle(String title) {
     _current = _current.copyWith(title: title);
+    notifyListeners();
   }
 
   void search(String term) {
