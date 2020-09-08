@@ -43,7 +43,7 @@ class AppState extends ChangeNotifier {
   }
 
   void newNote() {
-    current = Note.fromContent('new note');
+    current = Note.untitled(content: 'new note');
     store.addNote(current);
     _setEdit(true);
   }
@@ -54,6 +54,6 @@ class AppState extends ChangeNotifier {
   }
 
   void _saveCurrent() {
-    store.saveFile(_current.filename, _current.content);
+    store.saveNote(_current);
   }
 }

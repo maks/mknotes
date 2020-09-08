@@ -2,12 +2,16 @@ import 'package:meta/meta.dart';
 import 'dart:math' as math;
 
 class Note {
+  static const _UNTITLED = 'untitled';
+
   final String filename;
   final String title;
   final String content;
   final List<String> tags;
 
   String get name => title ?? filename.replaceAll(RegExp('_'), ' ');
+
+  bool get isUntitled => title == _UNTITLED;
 
   Note({
     @required this.filename,
@@ -20,6 +24,10 @@ class Note {
     final _title = _titleFromContent(content);
     final _filename = _title.replaceAll(RegExp(' '), '_');
     return Note(title: _title, filename: '$_filename.md', content: content);
+  }
+
+  factory Note.untitled({String content}) {
+    return Note(content: content, filename: _UNTITLED);
   }
 
   Note copyWith({

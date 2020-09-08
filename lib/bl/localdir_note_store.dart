@@ -49,8 +49,10 @@ class LocalDirNoteStore implements NoteStore {
   }
 
   @override
-  void saveFile(String filename, String contents) {
-    File(path.join(notesDir.path, filename)).writeAsString(contents);
+  void saveNote(Note note) {
+    final namedNote = note.isUntitled ? Note.fromContent(note.content) : note;
+    File(path.join(notesDir.path, namedNote.filename))
+        .writeAsString(namedNote.content);
   }
 
   @override

@@ -9,7 +9,7 @@ abstract class NoteStore {
   void addNote(Note note);
 
   /// Save note file with new contents
-  void saveFile(String filename, String contents);
+  void saveNote(Note note);
 
   /// Apply a filter to the list of notes returned by this store
   void filter(Filter filter) {}
