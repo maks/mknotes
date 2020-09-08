@@ -24,6 +24,10 @@ class AppState extends ChangeNotifier {
 
   void toggleEdit() {
     if (edit) {
+      if (_current.isUntitled) {
+        //FIXME: show an error UI to user instead of this
+        throw Exception("notes need a title before they can be saved");
+      }
       // if we were currently editing, save file before existing edit mode
       _saveCurrent();
     }

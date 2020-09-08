@@ -12,7 +12,7 @@ class Note {
 
   String get name => _title ?? _filename.replaceAll(RegExp('_'), ' ');
 
-  bool get _isUntitled => _title == _UNTITLED || _filename == "$_UNTITLED.md";
+  bool get isUntitled => _title == _UNTITLED || _filename == "$_UNTITLED.md";
 
   bool get isEmpty => content?.trim()?.isEmpty ?? true;
 
