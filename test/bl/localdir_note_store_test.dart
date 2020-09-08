@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:mknotes/bl/localdir_note_store.dart';
-import 'package:mknotes/bl/note.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -20,7 +19,7 @@ void main() {
 
     // store returns a stream of Lists of Notes so need
     // to await until we get first event out of the stream
-    List<Note> notes = await store.notes.first;
+    final notes = await store.notes.first;
 
     expect(notes.length, 1);
     expect(notes[0].name, 'foo');

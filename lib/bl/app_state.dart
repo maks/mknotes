@@ -18,11 +18,11 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  get edit => _edit;
+  bool get edit => _edit;
 
   AppState(this.store);
 
-  toggleEdit() {
+  void toggleEdit() {
     if (edit) {
       // if we were currently editing, save file before existing edit mode
       _saveCurrent();
@@ -33,7 +33,7 @@ class AppState extends ChangeNotifier {
   /// update WITHOUT notifying listeners, useful as textfields maintain their own
   /// state of the text so we don't want to keep rebuilding them as the content is edited
   /// due to them listening to changes to the app state
-  updateCurrentContent(String text) {
+  void updateCurrentContent(String text) {
     _current = _current.copyWith(content: text);
   }
 

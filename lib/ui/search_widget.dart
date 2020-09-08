@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../bl/app_state.dart';
 import 'package:provider/provider.dart';
+
+import '../bl/app_state.dart';
 
 class SearchField extends StatelessWidget {
   @override

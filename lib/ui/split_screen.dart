@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mknotes/bl/note.dart';
 import 'package:mknotes/bl/note_store.dart';
 import 'package:mknotes/ui/split.dart';
 
@@ -8,7 +9,7 @@ import 'search_widget.dart';
 
 class SplitScreen extends StatelessWidget {
   final NoteStore noteStore;
-  final Function showNote;
+  final Function(Note selected) showNote;
 
   const SplitScreen({Key key, this.noteStore, this.showNote}) : super(key: key);
 

@@ -35,10 +35,11 @@ class LocalDirNoteStore implements NoteStore {
     );
   }
 
+  @override
   Stream<List<Note>> get notes => _notesListStream;
 
   Future<String> _safeReadFile(File f) async {
-    var result;
+    String result;
     try {
       result = await f?.readAsString();
     } catch (e) {

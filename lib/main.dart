@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mknotes/ui/split_screen.dart';
-import 'package:window_size/window_size.dart';
-import 'bl/localdir_note_store.dart';
 import 'package:provider/provider.dart';
+import 'package:window_size/window_size.dart';
 
 import 'bl/app_state.dart';
+import 'bl/localdir_note_store.dart';
 import 'bl/note.dart';
 import 'bl/note_store.dart';
 

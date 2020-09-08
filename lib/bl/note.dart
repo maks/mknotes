@@ -1,5 +1,6 @@
-import 'package:meta/meta.dart';
 import 'dart:math' as math;
+
+import 'package:meta/meta.dart';
 
 class Note {
   static const _UNTITLED = 'untitled';
@@ -37,7 +38,7 @@ class Note {
     List<String> tags,
   }) {
     return Note(
-      filename: filename ?? this.filename,
+      filename: filename ?? filename,
       title: title ?? this.title,
       content: content ?? this.content,
       tags: tags ?? this.tags,
