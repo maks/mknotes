@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 class Note {
   static const _UNTITLED = 'untitled';
 
-  String _title;
+  final String _title;
 
   final String filename;
   final String content;
@@ -17,39 +17,29 @@ class Note {
 
   bool get isEmpty => content?.trim()?.isEmpty ?? true;
 
-  String get title {
-    if (_isUntitled) {
-      _title = _titleFromContent(content);
-    }
-    return _title;
-  }
+  String get title => _title;
 
   Note({
     @required this.filename,
     @required this.content,
-    String title,
+    @required String title,
     this.tags = const <String>[],
-  }) : _title = title;
+  }) : _title = _titleFromText(title);
 
-  factory Note.fromContent(String content) {
-    final _title = _titleFromContent(content);
-    final _filename = _title.replaceAll(RegExp(' '), '_');
-    return Note(title: _title, filename: '$_filename.md', content: content);
-  }
-
-  factory Note.untitled({String content}) {
-    return Note(content: content, filename: _UNTITLED);
+  factory Note.untitled(String content) {
+    return Note(content: content, title: _UNTITLED, filename: "$_UNTITLED.md");
   }
 
   Note copyWith({
     String name,
     String content,
     String title,
+    String filename,
     List<String> tags,
   }) {
     return Note(
-      filename: filename ?? filename,
-      title: title ?? this.title,
+      filename: filename ?? this.filename,
+      title: _titleFromText(title) ?? this.title,
       content: content ?? this.content,
       tags: tags ?? this.tags,
     );
@@ -58,10 +48,11 @@ class Note {
   @override
   String toString() => 'Note(name: $name, content: $content, tags: $tags)';
 
-  static String _titleFromContent(String content) {
-    final maxTitleLength = 20;
-    final title = content
-        .substring(0, math.min(maxTitleLength, content.length))
+  // enforce rules on what a title can be
+  static String _titleFromText(String text) {
+    final maxTitleLength = 80;
+    final title = text
+        .substring(0, math.min(maxTitleLength, text.length))
         .replaceAll(RegExp(r'[.,!?\\-\\<>\[\]]'), '');
     final newLinePosition = title.indexOf('\n');
     return (newLinePosition > 0) ? title.substring(0, newLinePosition) : title;

@@ -37,13 +37,17 @@ class AppState extends ChangeNotifier {
     _current = _current.copyWith(content: text);
   }
 
+  void updateCurrentTitle(String title) {
+    _current = _current.copyWith(title: title);
+  }
+
   void search(String term) {
     _currentSearchTerm = term;
     store.filter((term != null && term.isNotEmpty) ? SearchFilter(term) : null);
   }
 
   void newNote() {
-    current = Note.untitled(content: 'new note');
+    current = Note.untitled('new note');
     store.addNote(current);
     _setEdit(true);
   }
