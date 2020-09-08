@@ -8,6 +8,8 @@ abstract class NoteStore {
   /// Add note to store
   void addNote(Note note);
 
+  void updateNote(Note old, Note nue);
+
   /// Save note file with new contents
   void saveNote(Note note);
 

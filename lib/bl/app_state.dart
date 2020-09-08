@@ -34,12 +34,15 @@ class AppState extends ChangeNotifier {
   /// state of the text so we don't want to keep rebuilding them as the content is edited
   /// due to them listening to changes to the app state
   void updateCurrentContent(String text) {
+    final old = _current;
     _current = _current.copyWith(content: text);
+    store.updateNote(old, _current);
   }
 
   void updateCurrentTitle(String title) {
+    final old = _current;
     _current = _current.copyWith(title: title);
-    notifyListeners();
+    store.updateNote(old, _current);
   }
 
   void search(String term) {

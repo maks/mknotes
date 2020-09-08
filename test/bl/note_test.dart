@@ -18,7 +18,7 @@ void main() {
 
     expect(testNote.name, 'this is a test');
 
-    expect(testNote.filename, 'untitled.md');
+    expect(testNote.filename, 'this_is_a_test.md');
 
     expect(testNote.content, content);
   });

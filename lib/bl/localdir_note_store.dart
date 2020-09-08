@@ -75,4 +75,11 @@ class LocalDirNoteStore implements NoteStore {
     // FIXME: need to change this as it will clear any filter being currently applied
     _notesListStream.add(_fullList);
   }
+
+  @override
+  void updateNote(Note old, Note nue) {
+    _fullList.remove((Note n) => n == old);
+    _fullList.add(nue);
+    _notesListStream.add(_fullList);
+  }
 }

@@ -6,28 +6,31 @@ class Note {
   static const _UNTITLED = 'untitled';
 
   final String _title;
-
-  final String filename;
+  final String _filename;
   final String content;
   final List<String> tags;
 
-  String get name => title ?? filename.replaceAll(RegExp('_'), ' ');
+  String get name => _title ?? _filename.replaceAll(RegExp('_'), ' ');
 
-  bool get _isUntitled => _title == _UNTITLED;
+  bool get _isUntitled => _title == _UNTITLED || _filename == "$_UNTITLED.md";
 
   bool get isEmpty => content?.trim()?.isEmpty ?? true;
 
   String get title => _title;
 
+  String get filename =>
+      _filename ?? "${_titleFromText(title).replaceAll(' ', '_')}.md";
+
   Note({
-    @required this.filename,
+    String filename,
     @required this.content,
     @required String title,
     this.tags = const <String>[],
-  }) : _title = _titleFromText(title);
+  })  : _title = _titleFromText(title),
+        _filename = filename;
 
   factory Note.untitled(String content) {
-    return Note(content: content, title: _UNTITLED, filename: "$_UNTITLED.md");
+    return Note(content: content, title: _UNTITLED);
   }
 
   Note copyWith({
@@ -38,8 +41,8 @@ class Note {
     List<String> tags,
   }) {
     return Note(
-      filename: filename ?? this.filename,
-      title: _titleFromText(title) ?? this.title,
+      filename: filename ?? _filename,
+      title: title ?? this.title,
       content: content ?? this.content,
       tags: tags ?? this.tags,
     );
