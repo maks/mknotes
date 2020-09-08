@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../bl/note.dart';
 
 class NoteList extends StatelessWidget {
-  final notesStream;
+  final Stream<List<Note>> notesStream;
   final void Function(Note selected) showNote;
 
   NoteList(this.notesStream, this.showNote);

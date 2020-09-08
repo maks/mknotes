@@ -264,7 +264,7 @@ packages:
     source: hosted
     version: "1.8.0-nullsafety"
   pedantic:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: pedantic
       url: "https://pub.dartlang.org"
@@ -386,7 +386,7 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.16.0-nullsafety.1"
+    version: "1.16.0-nullsafety.2"
   test_api:
     dependency: transitive
     description:
@@ -400,7 +400,7 @@ packages:
       name: test_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.12-nullsafety.1"
+    version: "0.3.12-nullsafety.2"
   typed_data:
     dependency: transitive
     description:
@@ -443,6 +443,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.3"
+  window_size:
+    dependency: "direct main"
+    description:
+      path: "plugins/window_size"
+      ref: master
+      resolved-ref: "66e4b058971cb6c92c653f0d89c6a5c4aadb6539"
+      url: "git://github.com/google/flutter-desktop-embedding.git"
+    source: git
+    version: "0.1.0"
   yaml:
     dependency: transitive
     description:

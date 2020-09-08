@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../bl/app_state.dart';
-import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:provider/provider.dart';
+
+import '../bl/app_state.dart';
 
 /// Otherwise, <mark> indicates a portion of the document's content which
 /// is likely to be relevant to the user's current activity. This might be used,
@@ -90,6 +91,7 @@ class _NoteContentState extends State<NoteContent> {
 
 class SearchTermHighlight extends md.InlineSyntax {
   // we want to override the base classes regex to be case *IN*sensitive
+  @override
   final RegExp pattern;
 
   SearchTermHighlight(String pattern, {int startCharacter})

@@ -18,24 +18,35 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  get edit => _edit;
+  bool get edit => _edit;
 
   AppState(this.store);
 
-  toggleEdit() {
+  void toggleEdit() {
     if (edit) {
+      if (_current.isUntitled) {
+        //FIXME: show an error UI to user instead of this
+        throw Exception("notes need a title before they can be saved");
+      }
       // if we were currently editing, save file before existing edit mode
       _saveCurrent();
     }
-    _edit = !_edit;
-    notifyListeners();
+    _setEdit(!_edit);
   }
 
   /// update WITHOUT notifying listeners, useful as textfields maintain their own
   /// state of the text so we don't want to keep rebuilding them as the content is edited
   /// due to them listening to changes to the app state
-  updateCurrentContent(String text) {
+  void updateCurrentContent(String text) {
+    final old = _current;
     _current = _current.copyWith(content: text);
+    store.updateNote(old, _current);
+  }
+
+  void updateCurrentTitle(String title) {
+    final old = _current;
+    _current = _current.copyWith(title: title);
+    store.updateNote(old, _current);
   }
 
   void search(String term) {
@@ -43,7 +54,18 @@ class AppState extends ChangeNotifier {
     store.filter((term != null && term.isNotEmpty) ? SearchFilter(term) : null);
   }
 
+  void newNote() {
+    current = Note.untitled('new note');
+    store.addNote(current);
+    _setEdit(true);
+  }
+
+  void _setEdit(bool edit) {
+    _edit = edit;
+    notifyListeners();
+  }
+
   void _saveCurrent() {
-    store.saveFile(_current.filename, _current.content);
+    store.saveNote(_current);
   }
 }

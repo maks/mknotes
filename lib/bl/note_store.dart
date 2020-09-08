@@ -5,8 +5,13 @@ import 'note.dart';
 abstract class NoteStore {
   Stream<List<Note>> get notes;
 
+  /// Add note to store
+  void addNote(Note note);
+
+  void updateNote(Note old, Note nue);
+
   /// Save note file with new contents
-  void saveFile(String filename, String contents);
+  void saveNote(Note note);
 
   /// Apply a filter to the list of notes returned by this store
   void filter(Filter filter) {}

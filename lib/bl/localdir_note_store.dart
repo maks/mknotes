@@ -35,10 +35,11 @@ class LocalDirNoteStore implements NoteStore {
     );
   }
 
+  @override
   Stream<List<Note>> get notes => _notesListStream;
 
   Future<String> _safeReadFile(File f) async {
-    var result;
+    String result;
     try {
       result = await f?.readAsString();
     } catch (e) {
@@ -49,8 +50,8 @@ class LocalDirNoteStore implements NoteStore {
   }
 
   @override
-  void saveFile(String filename, String contents) {
-    File(path.join(notesDir.path, filename)).writeAsString(contents);
+  void saveNote(Note note) {
+    File(path.join(notesDir.path, note.filename)).writeAsString(note.content);
   }
 
   @override
@@ -66,5 +67,19 @@ class LocalDirNoteStore implements NoteStore {
   @override
   void dispose() {
     _notesListStream.close();
+  }
+
+  @override
+  void addNote(Note note) {
+    _fullList.add(note);
+    // FIXME: need to change this as it will clear any filter being currently applied
+    _notesListStream.add(_fullList);
+  }
+
+  @override
+  void updateNote(Note old, Note nue) {
+    _fullList.remove(old);
+    _fullList.add(nue);
+    _notesListStream.add(_fullList);
   }
 }

@@ -1,13 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:mknotes/ui/split_screen.dart';
-import 'bl/localdir_note_store.dart';
-import 'package:provider/provider.dart';
 
-import 'bl/app_state.dart';
-import 'bl/note.dart';
-import 'bl/note_store.dart';
+import 'ui/main_page.dart';
 
 void main() async {
   runApp(MyApp());
@@ -29,74 +22,5 @@ class MyApp extends StatelessWidget {
       ),
       home: MainPage(title: appName),
     );
-  }
-}
-
-class MainPage extends StatefulWidget {
-  final String title;
-
-  MainPage({@required this.title});
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  final NoteStore _noteStore;
-  final AppState appState;
-
-  // need to use factory constructor trick to initialise dependent finals
-  // ref: https://stackoverflow.com/a/52964776/85472
-  _MainPageState._(this._noteStore, this.appState);
-
-  factory _MainPageState() {
-    final store = LocalDirNoteStore(notesDir: Directory('./docs'));
-    return _MainPageState._(store, AppState(store));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: appState,
-      builder: (BuildContext context, _) => Scaffold(
-        appBar: AppBar(
-          title: Text(appState.current?.name ?? widget.title),
-          actions: [
-            if (context.watch<AppState>().edit)
-              IconButton(
-                icon: Icon(Icons.save),
-                onPressed: appState.toggleEdit,
-              )
-            else
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: appState.toggleEdit,
-              )
-          ],
-        ),
-        body: Center(
-          child: SplitScreen(
-            noteStore: _noteStore,
-            showNote: _showNote,
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _addNote,
-          tooltip: 'Add note',
-          child: Icon(Icons.add),
-        ),
-      ),
-    );
-  }
-
-  void _addNote() {
-    print('Add Note');
-  }
-
-  void _showNote(Note selected) {
-    print('SHOW: ${selected.name}');
-    setState(() {
-      appState.current = selected;
-    });
   }
 }
