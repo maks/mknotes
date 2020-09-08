@@ -23,6 +23,12 @@ dependencies:
   markdown: ^2.1.7
   provider: ^4.3.2
 
+  window_size:
+    git:
+      url: git://github.com/google/flutter-desktop-embedding.git
+      path: plugins/window_size
+      ref: master
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

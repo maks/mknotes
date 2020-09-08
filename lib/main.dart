@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mknotes/ui/split_screen.dart';
+import 'package:window_size/window_size.dart';
 import 'bl/localdir_note_store.dart';
 import 'package:provider/provider.dart';
 
@@ -55,6 +56,13 @@ class _MainPageState extends State<MainPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _windowInfo();
+    setWindowFrame(Rect.fromLTRB(1139.0, 517.0, 1861.0, 1125.0));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: appState,
@@ -98,5 +106,10 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       appState.current = selected;
     });
+  }
+
+  void _windowInfo() async {
+    final window = await getWindowInfo();
+    print("initial window size: ${window.frame}");
   }
 }
