@@ -5,21 +5,31 @@ import 'package:meta/meta.dart';
 class Note {
   static const _UNTITLED = 'untitled';
 
+  String _title;
+
   final String filename;
-  final String title;
   final String content;
   final List<String> tags;
 
   String get name => title ?? filename.replaceAll(RegExp('_'), ' ');
 
-  bool get isUntitled => title == _UNTITLED;
+  bool get _isUntitled => _title == _UNTITLED;
+
+  bool get isEmpty => content?.trim()?.isEmpty ?? true;
+
+  String get title {
+    if (_isUntitled) {
+      _title = _titleFromContent(content);
+    }
+    return _title;
+  }
 
   Note({
     @required this.filename,
     @required this.content,
-    this.title,
+    String title,
     this.tags = const <String>[],
-  });
+  }) : _title = title;
 
   factory Note.fromContent(String content) {
     final _title = _titleFromContent(content);
