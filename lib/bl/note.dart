@@ -69,6 +69,9 @@ class Note {
 
   // enforce rules on what a title can be
   static String _titleFromText(String text) {
+    if (text == null || text.isEmpty) {
+      return null;
+    }
     final maxTitleLength = 80;
     final title = text
         .substring(0, math.min(maxTitleLength, text.length))

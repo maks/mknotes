@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:path/path.dart' as path;
 import 'package:front_matter/front_matter.dart' as fm;
+import 'package:meta/meta.dart';
+import 'package:path/path.dart' as path;
+import 'package:rxdart/rxdart.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
+import '../extensions.dart';
 import 'filters.dart';
 import 'note.dart';
 import 'note_store.dart';
@@ -93,14 +94,19 @@ class LocalDirNoteStore implements NoteStore {
     final title =
         path.basenameWithoutExtension(f.absolute.path).replaceAll('_', ' ');
 
+    return parseNoteText(filename, title, content);
+  }
+
+  Future<Note> parseNoteText(
+      String filename, String title, String content) async {
     if (content?.startsWith('---') ?? false) {
       final fmDoc = fm.parse(content);
 
       return Note(
         filename: filename,
-        title: fmDoc.data['title'] as String ?? title,
+        title: fmDoc.getData('title') as String ?? title,
         content: fmDoc.content,
-        tags: _asStringList(fmDoc.data['tags']) ?? [],
+        tags: _asStringList(fmDoc.getData('tags')) ?? [],
       );
     } else {
       return Note(
