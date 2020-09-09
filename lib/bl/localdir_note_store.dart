@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:meta/meta.dart';
@@ -48,7 +49,12 @@ class LocalDirNoteStore implements NoteStore {
 
   @override
   void saveNote(Note note) {
-    File(path.join(notesDir.path, note.filename)).writeAsString(note.content);
+    String fileContent = '';
+    if (note.tags.isNotEmpty) {
+      fileContent = ('---\ntags: ${_listAsYamlString(note.tags)}\n---\n');
+    }
+    fileContent += note.content;
+    File(path.join(notesDir.path, note.filename)).writeAsString(fileContent);
   }
 
   @override
@@ -111,5 +117,9 @@ class LocalDirNoteStore implements NoteStore {
     } else {
       return null;
     }
+  }
+
+  String _listAsYamlString(List<String> list) {
+    return jsonEncode(list);
   }
 }
