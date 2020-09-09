@@ -93,7 +93,7 @@ class LocalDirNoteStore implements NoteStore {
     final title =
         path.basenameWithoutExtension(f.absolute.path).replaceAll('_', ' ');
 
-    if (content.startsWith('---')) {
+    if (content?.startsWith('---') ?? false) {
       final fmDoc = fm.parse(content);
 
       return Note(
