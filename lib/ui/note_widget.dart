@@ -46,13 +46,18 @@ class _NoteContentState extends State<NoteContent> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TagList(tags: context.watch<AppState>().current?.tags),
+            TagList(
+              tags: appState.current?.tags,
+              editable: appState.edit,
+              onDeleteTag: (tag) => appState.updateCurrentRemoveTag(tag),
+            ),
             _contentWidget(
                 context,
                 context.watch<AppState>().current?.content ?? '',
