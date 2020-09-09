@@ -8,7 +8,13 @@ class TagList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: tags?.map<Widget>((e) => Chip(label: Text(e)))?.toList() ?? [],
+      children: tags
+              ?.map<Widget>((e) => Padding(
+                    padding: const EdgeInsets.only(right: 4.0),
+                    child: Chip(label: Text(e)),
+                  ))
+              ?.toList() ??
+          [],
     );
   }
 }

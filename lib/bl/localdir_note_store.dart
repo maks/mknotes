@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:path/path.dart' as path;
+import 'package:front_matter/front_matter.dart' as fm;
+import 'package:yaml/yaml.dart' as yaml;
 
 import 'filters.dart';
 import 'note.dart';
@@ -19,12 +21,7 @@ class LocalDirNoteStore implements NoteStore {
 
     notesListStream
         .asyncMap(
-      (f) async => Note(
-        filename: path.basename(f.absolute.path),
-        title:
-            path.basenameWithoutExtension(f.absolute.path).replaceAll('_', ' '),
-        content: await _safeReadFile(f as File),
-      ),
+      (f) async => _parseNoteText(f as File),
     )
         .scan<List<Note>>(
             (accumulated, value, index) => accumulated..add(value), []).forEach(
@@ -81,5 +78,38 @@ class LocalDirNoteStore implements NoteStore {
     _fullList.remove(old);
     _fullList.add(nue);
     _notesListStream.add(_fullList);
+  }
+
+  // parse contents of a file into a Note
+  Future<Note> _parseNoteText(File f) async {
+    final content = await _safeReadFile(f);
+    final filename = path.basename(f.absolute.path);
+    final title =
+        path.basenameWithoutExtension(f.absolute.path).replaceAll('_', ' ');
+
+    if (content.startsWith('---')) {
+      final fmDoc = fm.parse(content);
+
+      return Note(
+        filename: filename,
+        title: fmDoc.data['title'] as String ?? title,
+        content: fmDoc.content,
+        tags: _asStringList(fmDoc.data['tags']) ?? [],
+      );
+    } else {
+      return Note(
+        filename: filename,
+        title: title,
+        content: content,
+      );
+    }
+  }
+
+  List<String> _asStringList(dynamic d) {
+    if (d is yaml.YamlList) {
+      return d.map((dynamic e) => e.toString()).toList();
+    } else {
+      return null;
+    }
   }
 }
