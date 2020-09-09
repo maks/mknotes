@@ -56,8 +56,10 @@ class _NoteContentState extends State<NoteContent> {
             TagList(
               tags: appState.current?.tags,
               editable: appState.edit,
+              onAddTag: (tag) => appState.updateCurrentAddTag(tag),
               onDeleteTag: (tag) => appState.updateCurrentRemoveTag(tag),
             ),
+            Divider(),
             _contentWidget(
                 context,
                 context.watch<AppState>().current?.content ?? '',

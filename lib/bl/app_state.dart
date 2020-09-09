@@ -57,6 +57,14 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateCurrentAddTag(String tag) {
+    final old = _current;
+    final updatedTags = _current.tags..add(tag);
+    _current = _current.copyWith(tags: updatedTags);
+    store.updateNote(old, _current);
+    notifyListeners();
+  }
+
   void search(String term) {
     _currentSearchTerm = term;
     store.filter((term != null && term.isNotEmpty) ? SearchFilter(term) : null);
