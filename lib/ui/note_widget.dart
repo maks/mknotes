@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:mknotes/ui/tag_list.dart';
 import 'package:provider/provider.dart';
 
 import '../bl/app_state.dart';
@@ -45,14 +46,27 @@ class _NoteContentState extends State<NoteContent> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: _contentWidget(
-            context,
-            context.watch<AppState>().current?.content ?? '',
-            _appState.edit,
-            _appState.searchTerm),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TagList(
+              tags: appState.current?.tags,
+              editable: appState.edit,
+              onAddTag: (tag) => appState.updateCurrentAddTag(tag),
+              onDeleteTag: (tag) => appState.updateCurrentRemoveTag(tag),
+            ),
+            Divider(),
+            _contentWidget(
+                context,
+                context.watch<AppState>().current?.content ?? '',
+                _appState.edit,
+                _appState.searchTerm),
+          ],
+        ),
       ),
     );
   }

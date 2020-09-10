@@ -5,8 +5,9 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('Local Dir returns list of file names', () async {
-    final mockDir = MockDir();
+  final mockDir = MockDir();
+
+  setUp(() {
     final mockFile = MockFile();
     final mockAbsolute = MockFile();
 
@@ -14,7 +15,9 @@ void main() {
     when(mockFile.absolute).thenReturn(mockAbsolute);
 
     when(mockDir.list()).thenAnswer((realInvocation) => Stream.value(mockFile));
+  });
 
+  test('Local Dir returns list of file names', () async {
     final store = LocalDirNoteStore(notesDir: mockDir);
 
     // store returns a stream of Lists of Notes so need
@@ -23,6 +26,40 @@ void main() {
 
     expect(notes.length, 1);
     expect(notes[0].name, 'foo');
+  });
+
+  test('parse note content with NO yaml frontmatter', () async {
+    final content = r'''a test
+''';
+    final store = LocalDirNoteStore(notesDir: mockDir);
+    final note = await store.parseNoteText('test', 'a test', content);
+
+    expect(note.tags.length, 0);
+  });
+
+  test('parse note content with yaml frontmatter', () async {
+    final content = r'''---
+tags: ['foo', 'bar']
+---
+a test
+''';
+    final store = LocalDirNoteStore(notesDir: mockDir);
+    final note = await store.parseNoteText('test', 'a test', content);
+
+    expect(note.tags.length, 2);
+    expect(note.tags.contains('foo'), true);
+    expect(note.tags.contains('bar'), true);
+  });
+
+  test('parse note content with empty yaml frontmatter', () async {
+    final content = r'''---
+---
+a test
+''';
+    final store = LocalDirNoteStore(notesDir: mockDir);
+    final note = await store.parseNoteText('test', 'a test', content);
+
+    expect(note.tags.length, 0);
   });
 }
 
