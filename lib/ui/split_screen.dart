@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mknotes/bl/note.dart';
+import 'package:mknotes/bl/item.dart';
 import 'package:mknotes/bl/note_store.dart';
 import 'package:mknotes/ui/split.dart';
 
@@ -9,9 +9,9 @@ import 'search_widget.dart';
 
 class SplitScreen extends StatelessWidget {
   final NoteStore noteStore;
-  final Function(Note selected) showNote;
+  final Function(ReferenceItem selected) showItem;
 
-  const SplitScreen({Key key, this.noteStore, this.showNote}) : super(key: key);
+  const SplitScreen({Key key, this.noteStore, this.showItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class SplitScreen extends StatelessWidget {
           child: Column(
             children: [
               SearchField(),
-              Expanded(child: NoteList(noteStore.notes, showNote)),
+              Expanded(child: ItemList(noteStore.items, showItem)),
             ],
           ),
         ),

@@ -6,7 +6,7 @@ void main() {
     final content = 'this is a test';
     final testNote = Note.untitled(content);
 
-    expect(testNote.name, 'untitled');
+    expect(testNote.title, 'untitled');
 
     expect(testNote.filename, 'untitled.md');
 
@@ -16,7 +16,7 @@ void main() {
     final content = '<this ?is,] a test>';
     final testNote = Note.untitled(content).copyWith(title: content);
 
-    expect(testNote.name, 'this is a test');
+    expect(testNote.title, 'this is a test');
 
     expect(testNote.filename, 'this_is_a_test.md');
 
@@ -26,7 +26,7 @@ void main() {
     final content = 'this is a\n test.';
     final testNote = Note.untitled(content);
 
-    expect(testNote.name, 'untitled');
+    expect(testNote.title, 'untitled');
 
     expect(testNote.filename, 'untitled.md');
 

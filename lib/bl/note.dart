@@ -4,22 +4,20 @@ import 'package:meta/meta.dart';
 import 'package:mknotes/bl/item.dart';
 
 class Note implements ReferenceItem {
-  static const _UNTITLED = 'untitled';
-
   final String _title;
   final String _filename;
+  @override
   final String content;
   @override
   final List<String> tags;
 
-  String get name => _title ?? _filename.replaceAll(RegExp('_'), ' ');
-
-  bool get isUntitled => _title == _UNTITLED || _filename == "$_UNTITLED.md";
+  @override
+  bool get isUntitled => _title == UNTITLED || _filename == "$UNTITLED.md";
 
   bool get isEmpty => content?.trim()?.isEmpty ?? true;
 
   @override
-  String get title => _title;
+  String get title => _title ?? _filename.replaceAll(RegExp('_'), ' ');
 
   String get filename =>
       _filename ?? "${_titleFromText(title).replaceAll(' ', '_')}.md";
@@ -33,7 +31,7 @@ class Note implements ReferenceItem {
         _filename = filename;
 
   factory Note.untitled(String content) {
-    return Note(content: content, title: _UNTITLED);
+    return Note(content: content, title: UNTITLED);
   }
 
   Note copyWith({
@@ -52,7 +50,7 @@ class Note implements ReferenceItem {
   }
 
   @override
-  String toString() => 'Note(name: $name, content: $content, tags: $tags)';
+  String toString() => 'Note(name: $title, content: $content, tags: $tags)';
 
   @override
   bool operator ==(Object o) {

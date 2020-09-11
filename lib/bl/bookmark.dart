@@ -7,15 +7,19 @@ class Bookmark implements ReferenceItem {
   final String url;
   @override
   final String title;
-  final String description;
+  @override
+  final String content;
   final DateTime timestamp;
   @override
   final List<String> tags;
 
+  @override
+  bool get isUntitled => title == UNTITLED;
+
   Bookmark({
     this.url,
     this.title,
-    this.description,
+    this.content,
     this.timestamp,
     this.tags,
   });
@@ -23,14 +27,14 @@ class Bookmark implements ReferenceItem {
   Bookmark copyWith({
     String url,
     String title,
-    String description,
+    String content,
     DateTime timestamp,
     List<String> tags,
   }) {
     return Bookmark(
       url: url ?? this.url,
       title: title ?? this.title,
-      description: description ?? this.description,
+      content: content ?? this.content,
       timestamp: timestamp ?? this.timestamp,
       tags: tags ?? this.tags,
     );
@@ -40,7 +44,7 @@ class Bookmark implements ReferenceItem {
     return <String, dynamic>{
       'url': url,
       'title': title,
-      'description': description,
+      'description': content,
       'timestamp': timestamp?.millisecondsSinceEpoch,
       'tags': tags,
     };
@@ -54,7 +58,7 @@ class Bookmark implements ReferenceItem {
     return Bookmark(
       url: map['url'] as String,
       title: map['title'] as String,
-      description: map['description'] as String,
+      content: map['description'] as String,
       timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int),
       tags: List<String>.from(map['tags'] as List<String>),
     );
@@ -67,7 +71,7 @@ class Bookmark implements ReferenceItem {
 
   @override
   String toString() {
-    return 'Bookmark(url: $url, title: $title, description: $description, timestamp: $timestamp, tags: $tags)';
+    return 'Bookmark(url: $url, title: $title, description: $content, timestamp: $timestamp, tags: $tags)';
   }
 
   @override
@@ -79,7 +83,7 @@ class Bookmark implements ReferenceItem {
     return o is Bookmark &&
         o.url == url &&
         o.title == title &&
-        o.description == description &&
+        o.content == content &&
         o.timestamp == timestamp &&
         listEquals(o.tags, tags);
   }
@@ -88,7 +92,7 @@ class Bookmark implements ReferenceItem {
   int get hashCode {
     return url.hashCode ^
         title.hashCode ^
-        description.hashCode ^
+        content.hashCode ^
         timestamp.hashCode ^
         tags.hashCode;
   }

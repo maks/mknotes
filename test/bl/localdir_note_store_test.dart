@@ -21,10 +21,10 @@ void main() {
 
     // store returns a stream of Lists of Notes so need
     // to await until we get first event out of the stream
-    final notes = await store.notes.first;
+    final notes = await store.items.first;
 
     expect(notes.length, 1);
-    expect(notes[0].name, 'foo');
+    expect(notes[0].title, 'foo');
   });
 
   test('list of file names ignores dot-files', () async {
@@ -47,15 +47,15 @@ void main() {
 
       final store = LocalDirNoteStore(notesDir: mockDir);
 
-      store.notes.listen((nuNotes) {
-        notes = nuNotes;
+      store.items.listen((nuNotes) {
+        notes = nuNotes as List<Note>;
       });
 
       // need to get all events in the notes stream out before continuing
       async.flushMicrotasks();
 
       expect(notes.length, 1);
-      expect(notes[0].name, 'foo');
+      expect(notes[0].title, 'foo');
     });
   });
 }

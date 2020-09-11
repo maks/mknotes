@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:mknotes/bl/item.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:path/path.dart' as path;
 
@@ -11,8 +12,8 @@ import 'note_store.dart';
 /// Interface for Stores that provide access to notes.
 class LocalDirNoteStore implements NoteStore {
   final Directory notesDir;
-  final _notesListStream = BehaviorSubject<List<Note>>();
-  List<Note> _fullList;
+  final _notesListStream = BehaviorSubject<List<ReferenceItem>>();
+  List<ReferenceItem> _fullList;
 
   LocalDirNoteStore({@required this.notesDir}) {
     final notesListStream = notesDir.list();
@@ -38,7 +39,7 @@ class LocalDirNoteStore implements NoteStore {
   }
 
   @override
-  Stream<List<Note>> get notes => _notesListStream;
+  Stream<List<ReferenceItem>> get items => _notesListStream;
 
   Future<String> _safeReadFile(File f) async {
     String result;

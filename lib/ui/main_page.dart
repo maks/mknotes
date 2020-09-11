@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mknotes/bl/app_state.dart';
+import 'package:mknotes/bl/item.dart';
 import 'package:mknotes/bl/localdir_note_store.dart';
-import 'package:mknotes/bl/note.dart';
 import 'package:mknotes/bl/note_store.dart';
 import 'package:provider/provider.dart';
 import 'package:window_size/window_size.dart';
@@ -46,7 +46,7 @@ class _MainPageState extends State<MainPage> {
       builder: (BuildContext context, _) => Scaffold(
         appBar: AppBar(
           title: NoteTitle(
-            title: (appState.current?.name ?? widget.title),
+            title: (appState.current?.title ?? widget.title),
             editable: context.watch<AppState>().edit,
             onChanged: (text) =>
                 context.read<AppState>().updateCurrentTitle(text),
@@ -67,7 +67,7 @@ class _MainPageState extends State<MainPage> {
         body: Center(
           child: SplitScreen(
             noteStore: _noteStore,
-            showNote: _showNote,
+            showItem: _showNote,
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -83,8 +83,8 @@ class _MainPageState extends State<MainPage> {
     appState.newNote();
   }
 
-  void _showNote(Note selected) {
-    print('SHOW: ${selected.name}');
+  void _showNote(ReferenceItem selected) {
+    print('SHOW: ${selected.title}');
     setState(() {
       appState.current = selected;
     });
