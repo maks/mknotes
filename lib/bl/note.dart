@@ -1,13 +1,15 @@
 import 'dart:math' as math;
 
 import 'package:meta/meta.dart';
+import 'package:mknotes/bl/item.dart';
 
-class Note {
+class Note implements ReferenceItem {
   static const _UNTITLED = 'untitled';
 
   final String _title;
   final String _filename;
   final String content;
+  @override
   final List<String> tags;
 
   String get name => _title ?? _filename.replaceAll(RegExp('_'), ' ');
@@ -16,6 +18,7 @@ class Note {
 
   bool get isEmpty => content?.trim()?.isEmpty ?? true;
 
+  @override
   String get title => _title;
 
   String get filename =>
