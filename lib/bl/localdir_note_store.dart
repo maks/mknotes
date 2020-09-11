@@ -18,14 +18,16 @@ class LocalDirNoteStore implements NoteStore {
     final notesListStream = notesDir.list();
 
     notesListStream
+        .where((f) => !path.basename(f.absolute.path).startsWith('.'))
         .asyncMap(
-      (f) async => Note(
-        filename: path.basename(f.absolute.path),
-        title:
-            path.basenameWithoutExtension(f.absolute.path).replaceAll('_', ' '),
-        content: await _safeReadFile(f as File),
-      ),
-    )
+          (f) async => Note(
+            filename: path.basename(f.absolute.path),
+            title: path
+                .basenameWithoutExtension(f.absolute.path)
+                .replaceAll('_', ' '),
+            content: await _safeReadFile(f as File),
+          ),
+        )
         .scan<List<Note>>(
             (accumulated, value, index) => accumulated..add(value), []).forEach(
       (notes) {

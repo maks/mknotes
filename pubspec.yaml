@@ -35,6 +35,7 @@ dev_dependencies:
   test: null
   mockito: ^4.1.1
   pedantic: ^1.9.2
+  fake_async: ^1.1.0-nullsafety
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
