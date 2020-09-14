@@ -4,8 +4,8 @@ import 'package:mknotes/bl/note_store.dart';
 import 'package:mknotes/ui/split.dart';
 
 import 'list_widget.dart';
-import 'note_widget.dart';
-import 'search_widget.dart';
+import 'note_content.dart';
+import 'search_field.dart';
 
 class SplitScreen extends StatelessWidget {
   final NoteStore noteStore;
