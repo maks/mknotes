@@ -29,6 +29,7 @@ dependencies:
       path: plugins/window_size
       ref: master
   basics: ^0.4.0+1
+  front_matter: ^1.1.0
 
 dev_dependencies:
   flutter_test:
