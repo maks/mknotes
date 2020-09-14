@@ -8,6 +8,7 @@ import 'package:mknotes/bl/item.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:path/path.dart' as path;
 
+import '../logging.dart';
 import 'filters.dart';
 import 'note.dart';
 import 'note_store.dart';
@@ -64,11 +65,11 @@ class LocalDirNoteStore implements NoteStore {
   }
 
   Future<void> _loadBookmarks() async {
-    print('loading bookmarks...');
+    Log().debug('loading bookmarks...');
     final stopwatch = Stopwatch()..start();
     final bookmarks = await compute(readBookmarksFile, notesDir.path);
 
-    print(
+    Log().debug(
         'loaded ${bookmarks.length} bookmarks in ${stopwatch.elapsed.inMilliseconds}ms');
     _fullList.addAll(bookmarks);
     _notesListStream.add(_fullList);
@@ -83,7 +84,7 @@ class LocalDirNoteStore implements NoteStore {
     try {
       result = await f?.readAsString();
     } catch (e) {
-      print('error reading file $f: $e');
+      Log().debug('error reading file $f: $e');
       result = '';
     }
     return result;

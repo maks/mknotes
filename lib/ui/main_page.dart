@@ -8,6 +8,7 @@ import 'package:mknotes/bl/note_store.dart';
 import 'package:provider/provider.dart';
 import 'package:window_size/window_size.dart';
 
+import '../logging.dart';
 import 'split_screen.dart';
 
 class MainPage extends StatefulWidget {
@@ -84,7 +85,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _showNote(ReferenceItem selected) {
-    print('SHOW: ${selected.title}');
+    Log().debug('SHOW: ${selected.title}');
     setState(() {
       appState.current = selected;
     });
@@ -92,7 +93,7 @@ class _MainPageState extends State<MainPage> {
 
   void _windowInfo() async {
     final window = await getWindowInfo();
-    print("initial window size: ${window.frame}");
+    Log().debug("initial window size: ${window.frame}");
   }
 }
 
