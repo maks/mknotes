@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
+import 'package:mknotes/bl/bookmark.dart';
 import 'package:mknotes/bl/item.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:path/path.dart' as path;
@@ -36,6 +39,20 @@ class LocalDirNoteStore implements NoteStore {
         _fullList = notes;
       },
     );
+
+    readBookmarksFile();
+  }
+
+  Future<List<Bookmark>> readBookmarksFile() async {
+    final File bookmarksfile = File(path.join(notesDir.path, '.bookmarks'));
+    if (bookmarksfile.existsSync()) {
+      final bookmarksJson = await bookmarksfile.readAsString();
+
+      final bookmarks = await parseBookmarksJson(bookmarksJson);
+      print('booksmarks $bookmarks');
+      return bookmarks;
+    }
+    return [];
   }
 
   @override
@@ -50,6 +67,15 @@ class LocalDirNoteStore implements NoteStore {
       result = '';
     }
     return result;
+  }
+
+  Future<List<Bookmark>> parseBookmarksJson(String json) async {
+    final List<dynamic> parsed = jsonDecode(json) as List<dynamic>;
+
+    return Future.value(parsed
+        .map<Bookmark>((dynamic jsonMap) =>
+            Bookmark.fromMap(jsonMap as Map<String, dynamic>))
+        .toList());
   }
 
   @override

@@ -1,9 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:mknotes/bl/item.dart';
+
+import '../extensions.dart';
+import 'item.dart';
 
 class Bookmark implements ReferenceItem {
+  /// Parse a list of tags as space separated list, from a single  string
+  static List<String> parseTags(String tags) =>
+      tags.isNotNullOrEmpty ? tags.split(' ') : null;
+
   final String url;
   @override
   final String title;
@@ -42,10 +48,10 @@ class Bookmark implements ReferenceItem {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'url': url,
-      'title': title,
-      'description': content,
-      'timestamp': timestamp?.millisecondsSinceEpoch,
+      'href': url,
+      'description': title,
+      'extended': content,
+      'time': timestamp?.millisecondsSinceEpoch,
       'tags': tags,
     };
   }
@@ -54,13 +60,12 @@ class Bookmark implements ReferenceItem {
     if (map == null) {
       return null;
     }
-
     return Bookmark(
-      url: map['url'] as String,
-      title: map['title'] as String,
-      content: map['description'] as String,
-      timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int),
-      tags: List<String>.from(map['tags'] as List<String>),
+      url: map['href'] as String,
+      title: map['description'] as String,
+      content: map['extended'] as String,
+      timestamp: DateTime.parse(map['time'] as String ?? ''),
+      tags: parseTags(map['tags'] as String),
     );
   }
 
