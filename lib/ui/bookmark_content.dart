@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:mknotes/bl/bookmark.dart';
-
+import '../bl/bookmark.dart';
+import '../extensions.dart';
 import 'tag_list.dart';
 
 class BookmarkContent extends StatelessWidget {
@@ -17,30 +17,43 @@ class BookmarkContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        children: [
-          TagList(
-            tags: bookmark?.tags ?? [],
-            editable: editable,
-            // onAddTag: (tag) => appState.updateCurrentAddTag(tag),
-            // onDeleteTag: (tag) => appState.updateCurrentRemoveTag(tag),
-          ),
-          TextField(
-              controller: TextEditingController()..text = bookmark?.url,
-              decoration: InputDecoration(
-                labelText: 'url',
-                alignLabelWithHint: true,
-              )),
-          Divider(),
-          TextField(
-            controller: TextEditingController()..text = bookmark?.content,
-            maxLines: null,
-            decoration: InputDecoration(
-              labelText: 'description',
-              alignLabelWithHint: true,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TagList(
+              tags: bookmark?.tags ?? [],
+              editable: editable,
+              //FIXME: handle editing of bookmarks in the future
+              // onAddTag: (tag) => appState.updateCurrentAddTag(tag),
+              // onDeleteTag: (tag) => appState.updateCurrentRemoveTag(tag),
             ),
-          ),
-        ],
+            TextField(
+                controller: TextEditingController()..text = bookmark?.url,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 16, bottom: 8),
+                  labelText: 'url',
+                  labelStyle:
+                      TextStyle(height: -1, fontWeight: FontWeight.bold),
+                )),
+            TextField(
+              controller: TextEditingController()..text = bookmark?.content,
+              maxLines: null,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(top: 24, bottom: 8),
+                labelText: 'description',
+                labelStyle: TextStyle(height: -1, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Text("Date: ${bookmark.timestamp.auFormat}"),
+            ),
+            Spacer(),
+          ],
+        ),
       ),
     );
   }

@@ -12,3 +12,8 @@ extension FrontMatterDocE on FrontMatterDocument {
     return (data != null) ? data[key] : null;
   }
 }
+
+extension DateTimeExtension on DateTime {
+  String get auFormat =>
+      "${day.toString().padLeft(2, '0')}-${month.toString().padLeft(2, '0')}-${year}";
+}
