@@ -51,6 +51,9 @@ class ContentPane extends StatelessWidget {
         ? Container()
         : (_appState.current is Note
             ? NoteContent()
-            : BookmarkContent(bookmark: _appState.current as Bookmark));
+            : BookmarkContent(
+                bookmark: _appState.current as Bookmark,
+                editable: _appState.edit,
+              ));
   }
 }
