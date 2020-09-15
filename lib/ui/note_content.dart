@@ -5,6 +5,7 @@ import 'package:mknotes/ui/tag_list.dart';
 import 'package:provider/provider.dart';
 
 import '../bl/app_state.dart';
+import '../logging.dart';
 
 /// Otherwise, <mark> indicates a portion of the document's content which
 /// is likely to be relevant to the user's current activity. This might be used,
@@ -119,7 +120,7 @@ class SearchTermHighlight extends md.InlineSyntax {
         (match.start > 0 &&
             match.input.substring(match.start - 1, match.start) == '/')) {
     } else {
-      print("MARK FOUND: ${match[0]}");
+      Log().debug("MARK FOUND: ${match[0]}");
       parser.addNode(md.Element.text(MARK_TAG, match[0]));
     }
     return true;

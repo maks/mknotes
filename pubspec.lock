@@ -29,6 +29,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.5.0-nullsafety"
+  basics:
+    dependency: "direct main"
+    description:
+      name: basics
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0+1"
   boolean_selector:
     dependency: transitive
     description:
@@ -107,7 +114,7 @@ packages:
     source: hosted
     version: "0.1.3"
   fake_async:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: fake_async
       url: "https://pub.dartlang.org"
@@ -298,6 +305,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.4"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.3"
   rxdart:
     dependency: "direct main"
     description:

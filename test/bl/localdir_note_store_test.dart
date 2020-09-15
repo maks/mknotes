@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:fake_async/fake_async.dart';
+import 'package:mknotes/bl/item.dart';
 import 'package:mknotes/bl/localdir_note_store.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -22,10 +24,42 @@ void main() {
 
     // store returns a stream of Lists of Notes so need
     // to await until we get first event out of the stream
-    final notes = await store.notes.first;
+    final notes = await store.items.first;
 
     expect(notes.length, 1);
-    expect(notes[0].name, 'foo');
+    expect(notes[0].title, 'foo');
+  });
+
+  test('list of file names ignores dot-files', () async {
+    final mockDir = MockDir();
+    final mockFile = MockFile();
+    final mockDotFile = MockFile();
+    final mockAbsolute = MockFile();
+    final mockDotAbsolute = MockFile();
+
+    when(mockAbsolute.path).thenReturn('foo');
+    when(mockFile.absolute).thenReturn(mockAbsolute);
+    when(mockDotAbsolute.path).thenReturn('.foobar');
+    when(mockDotFile.absolute).thenReturn(mockDotAbsolute);
+
+    when(mockDir.list()).thenAnswer(
+        (realInvocation) => Stream.fromIterable([mockFile, mockDotFile]));
+
+    FakeAsync().run((async) {
+      List<ReferenceItem> notes;
+
+      final store = LocalDirNoteStore(notesDir: mockDir);
+
+      store.items.listen((nuNotes) {
+        notes = nuNotes;
+      });
+
+      // need to get all events in the notes stream out before continuing
+      async.flushMicrotasks();
+
+      expect(notes.length, 1);
+      expect(notes[0].title, 'foo');
+    });
   });
 
   test('parse note content with NO yaml frontmatter', () async {

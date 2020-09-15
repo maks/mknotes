@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import '../bl/note.dart';
+import 'package:mknotes/bl/item.dart';
 
-class NoteList extends StatelessWidget {
-  final Stream<List<Note>> notesStream;
-  final void Function(Note selected) showNote;
+class ItemList extends StatelessWidget {
+  final Stream<List<ReferenceItem>> itemsStream;
+  final void Function(ReferenceItem selected) showNote;
 
-  NoteList(this.notesStream, this.showNote);
+  ItemList(this.itemsStream, this.showNote);
 
   @override
   Widget build(BuildContext context) {
-    List<Note> itemList;
-    return StreamBuilder<List<Note>>(
-        stream: notesStream,
+    List<ReferenceItem> itemList;
+    return StreamBuilder<List<ReferenceItem>>(
+        stream: itemsStream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return CircularProgressIndicator();
@@ -26,7 +26,7 @@ class NoteList extends StatelessWidget {
                     ),
                 itemBuilder: (BuildContext ctx, int index) {
                   return ListTile(
-                    title: Text(itemList[index].name),
+                    title: Text(itemList[index].title),
                     dense: true,
                     onTap: () => showNote(itemList[index]),
                   );

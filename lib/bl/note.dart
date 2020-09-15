@@ -1,22 +1,23 @@
 import 'dart:math' as math;
 
 import 'package:meta/meta.dart';
+import 'package:mknotes/bl/item.dart';
 
-class Note {
-  static const _UNTITLED = 'untitled';
-
+class Note implements ReferenceItem {
   final String _title;
   final String _filename;
+  @override
   final String content;
+  @override
   final List<String> tags;
 
-  String get name => _title ?? _filename.replaceAll(RegExp('_'), ' ');
-
-  bool get isUntitled => _title == _UNTITLED || _filename == "$_UNTITLED.md";
+  @override
+  bool get isUntitled => _title == UNTITLED || _filename == "$UNTITLED.md";
 
   bool get isEmpty => content?.trim()?.isEmpty ?? true;
 
-  String get title => _title;
+  @override
+  String get title => _title ?? _filename.replaceAll(RegExp('_'), ' ');
 
   String get filename =>
       _filename ?? "${_titleFromText(title).replaceAll(' ', '_')}.md";
@@ -30,9 +31,10 @@ class Note {
         _filename = filename;
 
   factory Note.untitled(String content) {
-    return Note(content: content, title: _UNTITLED);
+    return Note(content: content, title: UNTITLED);
   }
 
+  @override
   Note copyWith({
     String name,
     String content,
@@ -49,7 +51,7 @@ class Note {
   }
 
   @override
-  String toString() => 'Note(name: $name, content: $content, tags: $tags)';
+  String toString() => 'Note(name: $title, content: $content, tags: $tags)';
 
   @override
   bool operator ==(Object o) {

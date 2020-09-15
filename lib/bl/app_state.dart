@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:mknotes/bl/item.dart';
 import 'filters.dart';
 import 'note.dart';
 import 'note_store.dart';
 
 class AppState extends ChangeNotifier {
-  Note _current;
+  ReferenceItem _current;
   bool _edit = false;
   final NoteStore store;
   String _currentSearchTerm;
 
-  Note get current => _current;
+  ReferenceItem get current => _current;
 
   String get searchTerm => _currentSearchTerm;
 
-  set current(Note n) {
+  set current(ReferenceItem n) {
     _current = n;
     notifyListeners();
   }
@@ -38,22 +39,29 @@ class AppState extends ChangeNotifier {
   /// state of the text so we don't want to keep rebuilding them as the content is edited
   /// due to them listening to changes to the app state
   void updateCurrentContent(String text) {
-    final old = _current;
-    _current = _current.copyWith(content: text);
-    store.updateNote(old, _current);
+    if (_current is Note) {
+      final Note _curr = _current as Note;
+      final Note old = _curr;
+      _current = _curr.copyWith(content: text);
+      store.updateNote(old, _current as Note);
+    }
   }
 
   void updateCurrentTitle(String title) {
-    final old = _current;
-    _current = _current.copyWith(title: title);
-    store.updateNote(old, _current);
+    if (_current is Note) {
+      final Note _curr = _current as Note;
+      final old = _curr;
+      _current = _curr.copyWith(title: title);
+      store.updateNote(old, _current as Note);
+    }
   }
 
   void updateCurrentRemoveTag(String tag) {
     final old = _current;
     final updatedTags = _current.tags..remove(tag);
     _current = _current.copyWith(tags: updatedTags);
-    store.updateNote(old, _current);
+    //FIXME: need to handle updating bookmarks as well later on
+    store.updateNote(old as Note, _current as Note);
     notifyListeners();
   }
 
@@ -61,7 +69,8 @@ class AppState extends ChangeNotifier {
     final old = _current;
     final updatedTags = _current.tags..add(tag);
     _current = _current.copyWith(tags: updatedTags);
-    store.updateNote(old, _current);
+    //FIXME: need to handle updating bookmarks as well later on
+    store.updateNote(old as Note, _current as Note);
     notifyListeners();
   }
 
@@ -72,7 +81,7 @@ class AppState extends ChangeNotifier {
 
   void newNote() {
     current = Note.untitled('new note');
-    store.addNote(current);
+    store.addNote(current as Note);
     _setEdit(true);
   }
 
@@ -82,6 +91,6 @@ class AppState extends ChangeNotifier {
   }
 
   void _saveCurrent() {
-    store.saveNote(_current);
+    store.saveNote(_current as Note);
   }
 }

@@ -1,9 +1,9 @@
-import 'note.dart';
+import 'package:mknotes/bl/item.dart';
 
 /// A filter can be applied to a Note Store to apply a condition
 /// to all notes to choose which notes are returned by the Store.
 abstract class Filter {
-  bool apply(Note note);
+  bool apply(ReferenceItem note);
 }
 
 class SearchFilter implements Filter {
@@ -12,7 +12,7 @@ class SearchFilter implements Filter {
   SearchFilter(this.term);
 
   @override
-  bool apply(Note note) {
-    return note.name.contains(term) || (note.content?.contains(term) ?? false);
+  bool apply(ReferenceItem item) {
+    return item.title.contains(term) || (item.content?.contains(term) ?? false);
   }
 }

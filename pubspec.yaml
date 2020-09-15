@@ -28,6 +28,7 @@ dependencies:
       url: git://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
       ref: master
+  basics: ^0.4.0+1
   front_matter: ^1.1.0
 
 dev_dependencies:
@@ -36,6 +37,7 @@ dev_dependencies:
   test: null
   mockito: ^4.1.1
   pedantic: ^1.9.2
+  fake_async: ^1.1.0-nullsafety
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
