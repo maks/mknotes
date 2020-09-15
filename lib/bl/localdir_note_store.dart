@@ -2,18 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:front_matter/front_matter.dart' as fm;
 import 'package:meta/meta.dart';
 import 'package:mknotes/bl/bookmark.dart';
 import 'package:mknotes/bl/item.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:front_matter/front_matter.dart' as fm;
-import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:rxdart/rxdart.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
-import '../logging.dart';
 import '../extensions.dart';
+import '../logging.dart';
 import 'filters.dart';
 import 'note.dart';
 import 'note_store.dart';

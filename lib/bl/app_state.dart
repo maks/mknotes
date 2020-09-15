@@ -60,7 +60,8 @@ class AppState extends ChangeNotifier {
     final old = _current;
     final updatedTags = _current.tags..remove(tag);
     _current = _current.copyWith(tags: updatedTags);
-    store.updateNote(old, _current);
+    //FIXME: need to handle updating bookmarks as well later on
+    store.updateNote(old as Note, _current as Note);
     notifyListeners();
   }
 
@@ -68,7 +69,8 @@ class AppState extends ChangeNotifier {
     final old = _current;
     final updatedTags = _current.tags..add(tag);
     _current = _current.copyWith(tags: updatedTags);
-    store.updateNote(old, _current);
+    //FIXME: need to handle updating bookmarks as well later on
+    store.updateNote(old as Note, _current as Note);
     notifyListeners();
   }
 

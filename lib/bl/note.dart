@@ -34,6 +34,7 @@ class Note implements ReferenceItem {
     return Note(content: content, title: UNTITLED);
   }
 
+  @override
   Note copyWith({
     String name,
     String content,

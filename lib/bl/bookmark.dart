@@ -30,6 +30,7 @@ class Bookmark implements ReferenceItem {
     this.tags,
   });
 
+  @override
   Bookmark copyWith({
     String url,
     String title,
