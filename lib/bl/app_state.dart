@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mknotes/bl/item.dart';
+import 'package:mknotes/bl/reference_item.dart';
 import 'filters.dart';
 import 'note.dart';
 import 'note_store.dart';

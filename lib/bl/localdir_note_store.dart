@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:front_matter/front_matter.dart' as fm;
 import 'package:meta/meta.dart';
 import 'package:mknotes/bl/bookmark.dart';
-import 'package:mknotes/bl/item.dart';
+import 'package:mknotes/bl/reference_item.dart';
 import 'package:path/path.dart' as path;
 import 'package:rxdart/rxdart.dart';
 import 'package:yaml/yaml.dart' as yaml;
@@ -142,14 +142,14 @@ class LocalDirNoteStore implements NoteStore {
       final fmDoc = fm.parse(content);
 
       return Note(
-        filename: filename,
+        id: filename,
         title: fmDoc.getData('title') as String ?? title,
         content: fmDoc.content,
         tags: _asStringList(fmDoc.getData('tags')) ?? [],
       );
     } else {
       return Note(
-        filename: filename,
+        id: filename,
         title: title,
         content: content,
       );

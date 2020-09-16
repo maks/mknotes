@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:fake_async/fake_async.dart';
-import 'package:mknotes/bl/item.dart';
+import 'package:mknotes/bl/reference_item.dart';
 import 'package:mknotes/bl/localdir_note_store.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

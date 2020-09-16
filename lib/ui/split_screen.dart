@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 
 import '../bl/app_state.dart';
 import '../bl/bookmark.dart';
-import '../bl/item.dart';
 import '../bl/note.dart';
 import '../bl/note_store.dart';
+import '../bl/reference_item.dart';
 import '../extensions.dart';
 import 'bookmark_content.dart';
 import 'list_widget.dart';

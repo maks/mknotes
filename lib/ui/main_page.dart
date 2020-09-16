@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mknotes/bl/app_state.dart';
-import 'package:mknotes/bl/item.dart';
+import 'package:mknotes/bl/reference_item.dart';
 import 'package:mknotes/bl/localdir_note_store.dart';
 import 'package:mknotes/bl/note_store.dart';
 import 'package:provider/provider.dart';

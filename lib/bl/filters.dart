@@ -1,4 +1,4 @@
-import 'package:mknotes/bl/item.dart';
+import 'package:mknotes/bl/reference_item.dart';
 
 /// A filter can be applied to a Note Store to apply a condition
 /// to all notes to choose which notes are returned by the Store.

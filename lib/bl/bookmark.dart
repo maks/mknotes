@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import '../extensions.dart';
-import 'item.dart';
+import 'reference_item.dart';
 
 class Bookmark implements ReferenceItem {
   /// Parse a list of tags as space separated list, from a single  string
@@ -18,11 +18,14 @@ class Bookmark implements ReferenceItem {
   final DateTime timestamp;
   @override
   final List<String> tags;
+  @override
+  final String id;
 
   @override
   bool get isUntitled => title == UNTITLED;
 
   Bookmark({
+    this.id,
     this.url,
     this.title,
     this.content,

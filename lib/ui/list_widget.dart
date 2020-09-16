@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mknotes/bl/item.dart';
+import 'package:mknotes/bl/reference_item.dart';
 
 class ItemList extends StatelessWidget {
   final Stream<List<ReferenceItem>> itemsStream;
