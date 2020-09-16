@@ -23,6 +23,7 @@ class SplitScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Split(
       axis: Axis.horizontal,
+      minSizes: [100, 200],
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 2),
