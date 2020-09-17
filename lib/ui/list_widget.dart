@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mknotes/bl/reference_item.dart';
+import '../bl/note.dart';
+import '../bl/reference_item.dart';
 
 class ItemList extends StatelessWidget {
   final Stream<List<ReferenceItem>> itemsStream;
@@ -25,8 +26,12 @@ class ItemList extends StatelessWidget {
                       color: Colors.black,
                     ),
                 itemBuilder: (BuildContext ctx, int index) {
+                  final item = itemList[index];
                   return ListTile(
-                    title: Text(itemList[index].title),
+                    title: Text(item.title),
+                    leading: (item is Note)
+                        ? Icon(Icons.notes)
+                        : Icon(Icons.bookmark),
                     dense: true,
                     onTap: () => showNote(itemList[index]),
                   );
