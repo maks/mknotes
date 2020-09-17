@@ -27,11 +27,14 @@ class SplitScreen extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 2),
-          child: Column(
-            children: [
-              SearchField(),
-              Expanded(child: ItemList(noteStore.items, showItem)),
-            ],
+          child: Container(
+            color: Theme.of(context).backgroundColor,
+            child: Column(
+              children: [
+                SearchField(),
+                Expanded(child: ItemList(noteStore.items, showItem)),
+              ],
+            ),
           ),
         ),
         Padding(
