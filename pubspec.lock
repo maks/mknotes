@@ -284,6 +284,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0-nullsafety"
+  pinboard:
+    dependency: "direct main"
+    description:
+      name: pinboard
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   pool:
     dependency: transitive
     description:

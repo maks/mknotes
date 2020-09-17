@@ -36,7 +36,7 @@ Future<List<Bookmark>> parseBookmarksJson(String json) async {
       .toList());
 }
 
-/// Interface for Stores that provide access to notes.
+/// Local file based store
 class LocalDirNoteStore implements NoteStore {
   final Directory notesDir;
   final _notesListStream = BehaviorSubject<Set<ReferenceItem>>();

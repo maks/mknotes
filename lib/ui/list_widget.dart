@@ -14,7 +14,7 @@ class ItemList extends StatelessWidget {
         stream: itemsStream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
           itemList = snapshot.data;
           return Container(

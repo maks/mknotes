@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mknotes/bl/app_state.dart';
+import 'package:mknotes/bl/pinboard_note_store.dart';
 import 'package:mknotes/bl/reference_item.dart';
 import 'package:mknotes/bl/localdir_note_store.dart';
 import 'package:mknotes/bl/note_store.dart';
@@ -29,8 +30,11 @@ class _MainPageState extends State<MainPage> {
   _MainPageState._(this._noteStore, this.appState);
 
   factory _MainPageState() {
-    final store = LocalDirNoteStore(notesDir: Directory('./docs'));
-    return _MainPageState._(store, AppState(store));
+    final localStore = LocalDirNoteStore(notesDir: Directory('./docs'));
+    final pinboardStore =
+        PinboardNoteStore(username: "maks", token: "0ED2863F50C96DFE4B17");
+
+    return _MainPageState._(localStore, AppState(localStore));
   }
 
   @override
