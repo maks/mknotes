@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:front_matter/front_matter.dart' as fm;
 import 'package:meta/meta.dart';
-import 'package:mknotes/bl/bookmark.dart';
 import 'package:mknotes/bl/reference_item.dart';
 import 'package:path/path.dart' as path;
 import 'package:rxdart/rxdart.dart';
@@ -15,26 +14,6 @@ import '../logging.dart';
 import 'filters.dart';
 import 'note.dart';
 import 'note_store.dart';
-
-Future<List<Bookmark>> readBookmarksFile(String notespath) async {
-  final File bookmarksfile = File(path.join(notespath, '.bookmarks'));
-  if (bookmarksfile.existsSync()) {
-    final bookmarksJson = await bookmarksfile.readAsString();
-
-    final bookmarks = await parseBookmarksJson(bookmarksJson);
-    return bookmarks;
-  }
-  return [];
-}
-
-Future<List<Bookmark>> parseBookmarksJson(String json) async {
-  final List<dynamic> parsed = jsonDecode(json) as List<dynamic>;
-
-  return Future.value(parsed
-      .map<Bookmark>((dynamic jsonMap) =>
-          Bookmark.fromMap(jsonMap as Map<String, dynamic>))
-      .toList());
-}
 
 /// Local file based store
 class LocalDirNoteStore implements NoteStore {
@@ -57,19 +36,6 @@ class LocalDirNoteStore implements NoteStore {
         _notesListStream.add(_fullList);
       },
     );
-
-    _loadBookmarks();
-  }
-
-  Future<void> _loadBookmarks() async {
-    Log().debug('loading bookmarks...');
-    final stopwatch = Stopwatch()..start();
-    final bookmarks = await compute(readBookmarksFile, notesDir.path);
-
-    Log().debug(
-        'loaded ${bookmarks.length} bookmarks in ${stopwatch.elapsed.inMilliseconds}ms');
-    _fullList.addAll(bookmarks);
-    _notesListStream.add(_fullList);
   }
 
   @override
