@@ -32,18 +32,18 @@ class PinboardBookmarks {
 
   Future<bool> get haveLocalCache async => _bookmarksCache.exists();
 
+  Stream<List<Bookmark>> get items =>
+      __bookmarksListStream.stream.map((s) => s.toList());
+
   PinboardBookmarks(
       {@required String username,
       @required String token,
       @required Directory cacheDir})
       : _bookmarksCache = File(path.joinAll([cacheDir.path, '.bookmarks'])) {
     pbClient = pb.Pinboard(username: username, token: token);
-
-    // call async function to load trigger loading bookmarks
-    _load();
   }
 
-  void _load() async {
+  void load() async {
     if (await haveLocalCache) {
       await _loadBookmarksFromFile();
       //TODO: then add any newer bookmarks from pinboard

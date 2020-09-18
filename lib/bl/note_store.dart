@@ -1,11 +1,9 @@
-import 'package:mknotes/bl/reference_item.dart';
-
 import 'filters.dart';
 import 'note.dart';
 
 /// Interface for Stores that provide access to notes.
 abstract class NoteStore {
-  Stream<List<ReferenceItem>> get items;
+  Stream<List<Note>> get items;
 
   /// Add note to store
   void addNote(Note note);

@@ -1,6 +1,8 @@
+import 'dart:math' as m;
+
 import 'package:basics/basics.dart';
 import 'package:front_matter/front_matter.dart';
-import 'dart:math' as m;
+
 export 'package:basics/basics.dart';
 
 extension ObjectExt on String {

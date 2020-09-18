@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:front_matter/front_matter.dart' as fm;
 import 'package:meta/meta.dart';
-import 'package:mknotes/bl/reference_item.dart';
+import 'package:mknotes/bl/pinboard_bookmarks.dart';
 import 'package:path/path.dart' as path;
 import 'package:rxdart/rxdart.dart';
 import 'package:yaml/yaml.dart' as yaml;
@@ -18,10 +18,10 @@ import 'note_store.dart';
 /// Local file based store
 class LocalDirNoteStore implements NoteStore {
   final Directory notesDir;
-  final _notesListStream = BehaviorSubject<Set<ReferenceItem>>();
-  final Set<ReferenceItem> _fullList = {};
+  final _notesListStream = BehaviorSubject<Set<Note>>();
+  final Set<Note> _fullList = {};
 
-  LocalDirNoteStore({@required this.notesDir}) {
+  LocalDirNoteStore({@required this.notesDir, PinboardBookmarks bookmarks}) {
     final notesListStream = notesDir.list();
 
     notesListStream
@@ -39,8 +39,8 @@ class LocalDirNoteStore implements NoteStore {
   }
 
   @override
-  Stream<List<ReferenceItem>> get items =>
-      _notesListStream.map((s) => s.toList());
+  Stream<List<Note>> get items =>
+      _notesListStream.stream.map((s) => s.toList());
 
   Future<String> _safeReadFile(File f) async {
     String result;

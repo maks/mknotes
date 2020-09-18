@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../bl/app_state.dart';
 import '../bl/bookmark.dart';
 import '../bl/note.dart';
-import '../bl/note_store.dart';
 import '../bl/reference_item.dart';
 import '../extensions.dart';
 import 'bookmark_content.dart';
@@ -14,10 +13,10 @@ import 'search_field.dart';
 import 'split.dart';
 
 class SplitScreen extends StatelessWidget {
-  final NoteStore noteStore;
+  final Stream<List<ReferenceItem>> itemsList;
   final Function(ReferenceItem selected) showItem;
 
-  const SplitScreen({Key key, this.noteStore, this.showItem}) : super(key: key);
+  const SplitScreen({Key key, this.itemsList, this.showItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +31,7 @@ class SplitScreen extends StatelessWidget {
             child: Column(
               children: [
                 SearchField(),
-                Expanded(child: ItemList(noteStore.items, showItem)),
+                Expanded(child: ItemList(itemsList, showItem)),
               ],
             ),
           ),

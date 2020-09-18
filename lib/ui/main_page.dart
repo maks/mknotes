@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mknotes/bl/app_state.dart';
+import 'package:mknotes/bl/pinboard_bookmarks.dart';
 import 'package:mknotes/bl/pinboard_note_store.dart';
 import 'package:mknotes/bl/reference_item.dart';
 import 'package:mknotes/bl/localdir_note_store.dart';
-import 'package:mknotes/bl/note_store.dart';
 import 'package:provider/provider.dart';
 import 'package:window_size/window_size.dart';
 
@@ -22,19 +22,26 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final NoteStore _noteStore;
   final AppState appState;
 
   // need to use factory constructor trick to initialise dependent finals
   // ref: https://stackoverflow.com/a/52964776/85472
-  _MainPageState._(this._noteStore, this.appState);
+  _MainPageState._(this.appState);
 
   factory _MainPageState() {
-    final localStore = LocalDirNoteStore(notesDir: Directory('./docs'));
+    // TODO: store as user pref and UI to  allow user to set
+    final notesDir = Directory('./docs');
+    final localStore = LocalDirNoteStore(notesDir: notesDir);
     final pinboardStore =
         PinboardNoteStore(username: "maks", token: "0ED2863F50C96DFE4B17");
-
-    return _MainPageState._(localStore, AppState(localStore));
+    final bookmarks = PinboardBookmarks(
+      username: "maks",
+      token: "0ED2863F50C96DFE4B17",
+      cacheDir: notesDir,
+    );
+    final appState = AppState(localStore, bookmarks);
+    appState.loadBookmarks();
+    return _MainPageState._(appState);
   }
 
   @override
@@ -71,7 +78,7 @@ class _MainPageState extends State<MainPage> {
         ),
         body: Center(
           child: SplitScreen(
-            noteStore: _noteStore,
+            itemsList: appState.allItems,
             showItem: _showNote,
           ),
         ),

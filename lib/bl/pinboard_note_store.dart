@@ -1,5 +1,3 @@
-import 'package:mknotes/bl/reference_item.dart';
-
 import 'package:mknotes/bl/note.dart';
 
 import 'package:mknotes/bl/filters.dart';
@@ -11,8 +9,11 @@ import 'note_store.dart';
 
 /// Local file based store
 class PinboardNoteStore implements NoteStore {
-  final _notesListStream = BehaviorSubject<Set<ReferenceItem>>();
+  final _notesListStream = BehaviorSubject<Set<Note>>();
   pb.Pinboard pbClient;
+
+  @override
+  Stream<List<Note>> get items => _notesListStream.map((s) => s.toList());
 
   PinboardNoteStore({@required String username, @required String token}) {
     pbClient = pb.Pinboard(username: username, token: token);
@@ -34,10 +35,6 @@ class PinboardNoteStore implements NoteStore {
   void filter(Filter filter) {
     // TODO: implement filter
   }
-
-  @override
-  Stream<List<ReferenceItem>> get items =>
-      _notesListStream.map((s) => s.toList());
 
   @override
   void saveNote(Note note) {
