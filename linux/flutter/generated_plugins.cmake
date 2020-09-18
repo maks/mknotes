@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   window_size
+  file_chooser
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mknotes/ui/settings_page.dart';
 import 'package:preferences/preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:window_size/window_size.dart';
@@ -41,10 +42,14 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.cyan[600],
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Provider(
-        create: (_) => Preferences(),
-        builder: (_, _2) => page,
-      ),
+      initialRoute: '/',
+      routes: {
+        "/": (_) => Provider(
+              create: (_) => Preferences(),
+              builder: (_, _2) => page,
+            ),
+        "/settings": (_) => SettingsPage(),
+      },
     );
   }
 }

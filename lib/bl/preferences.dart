@@ -1,11 +1,12 @@
 import 'package:preferences/preferences.dart';
 
-const String _DOCS_DIR_PREF = "docs_dir";
-const String _PINBOARD_USER_PREF = "pinboard_user";
-const String _PINBOARD_TOKEN_PREF = "pinboard_token";
+const String DOCS_DIR_PREF = "docs_dir";
+const String PINBOARD_TOKEN_PREF = "pinboard_token";
 
 class Preferences {
-  String get docsDir => PrefService.getString(_DOCS_DIR_PREF) ?? './docs';
-  String get pinboardUser => PrefService.getString(_PINBOARD_USER_PREF);
-  String get pinboardToken => PrefService.getString(_PINBOARD_TOKEN_PREF);
+  String get docsDir => PrefService.getString(DOCS_DIR_PREF) ?? './docs';
+  String get pinboardUser =>
+      PrefService.getString(PINBOARD_TOKEN_PREF).split(":")[0];
+  String get pinboardToken =>
+      PrefService.getString(PINBOARD_TOKEN_PREF).split(":")[1];
 }

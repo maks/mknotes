@@ -28,6 +28,10 @@ dependencies:
       url: git://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
       ref: master
+  file_chooser:
+    git:
+      url: git://github.com/google/flutter-desktop-embedding.git
+      path: plugins/file_chooser    
   basics: ^0.4.0+1
   front_matter: ^1.1.0
   pinboard: ^1.1.1

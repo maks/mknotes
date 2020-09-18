@@ -37,8 +37,8 @@ class _MainPageState extends State<MainPage> {
     //   token: prefs.pinboardToken,
     // );
     final bookmarks = PinboardBookmarks(
-      username: PrefService.getString('pinboard_user'),
-      token: PrefService.getString('pinboard_token'),
+      username: prefs.pinboardUser,
+      token: prefs.pinboardToken,
       cacheDir: notesDir,
     );
     appState = AppState(localStore, bookmarks);
@@ -67,7 +67,11 @@ class _MainPageState extends State<MainPage> {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: appState.toggleEdit,
-              )
+              ),
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () => Navigator.pushNamed(context, "/settings"),
+            )
           ],
         ),
         body: Center(
