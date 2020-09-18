@@ -31,6 +31,7 @@ dependencies:
   basics: ^0.4.0+1
   front_matter: ^1.1.0
   pinboard: ^1.1.1
+  preferences: ^5.2.1
 
 dev_dependencies:
   flutter_test:

@@ -46,7 +46,6 @@ class PinboardBookmarks {
   void load() async {
     if (await haveLocalCache) {
       await _loadBookmarksFromFile();
-      //TODO: then add any newer bookmarks from pinboard
     } else {
       _fetchAllBookmarks();
     }
@@ -63,12 +62,14 @@ class PinboardBookmarks {
   }
 
   void _fetchAllBookmarks() async {
-    final posts = await pbClient.posts.all();
-    final _fullBookmarkList = posts
+    final pbResponse = await pbClient.posts.recent(count: 10); //all();
+    final Set<Bookmark> _fullBookmarkList = pbResponse.posts
         .map((p) => Bookmark(
               id: p.hash,
               title: p.description,
+              url: p.href,
               content: p.extended,
+              timestamp: DateTime.parse(p.time),
               tags: p.tags,
             ))
         .toSet();

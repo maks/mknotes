@@ -6,6 +6,7 @@ import 'package:mknotes/bl/pinboard_bookmarks.dart';
 import 'package:mknotes/bl/pinboard_note_store.dart';
 import 'package:mknotes/bl/reference_item.dart';
 import 'package:mknotes/bl/localdir_note_store.dart';
+import 'package:preferences/preference_service.dart';
 import 'package:provider/provider.dart';
 import 'package:window_size/window_size.dart';
 
@@ -32,11 +33,13 @@ class _MainPageState extends State<MainPage> {
     // TODO: store as user pref and UI to  allow user to set
     final notesDir = Directory('./docs');
     final localStore = LocalDirNoteStore(notesDir: notesDir);
-    final pinboardStore =
-        PinboardNoteStore(username: "maks", token: "0ED2863F50C96DFE4B17");
+    final pinboardStore = PinboardNoteStore(
+      username: PrefService.getString('pinboard_user'),
+      token: PrefService.getString('pinboard_token'),
+    );
     final bookmarks = PinboardBookmarks(
-      username: "maks",
-      token: "0ED2863F50C96DFE4B17",
+      username: PrefService.getString('pinboard_user'),
+      token: PrefService.getString('pinboard_token'),
       cacheDir: notesDir,
     );
     final appState = AppState(localStore, bookmarks);
