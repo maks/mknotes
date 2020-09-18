@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mknotes/bl/app_state.dart';
 import 'package:mknotes/bl/pinboard_bookmarks.dart';
-import 'package:mknotes/bl/pinboard_note_store.dart';
+import 'package:mknotes/bl/preferences.dart';
 import 'package:mknotes/bl/reference_item.dart';
 import 'package:mknotes/bl/localdir_note_store.dart';
 import 'package:preferences/preference_service.dart';
@@ -23,35 +23,29 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final AppState appState;
-
-  // need to use factory constructor trick to initialise dependent finals
-  // ref: https://stackoverflow.com/a/52964776/85472
-  _MainPageState._(this.appState);
-
-  factory _MainPageState() {
-    // TODO: store as user pref and UI to  allow user to set
-    final notesDir = Directory('./docs');
-    final localStore = LocalDirNoteStore(notesDir: notesDir);
-    final pinboardStore = PinboardNoteStore(
-      username: PrefService.getString('pinboard_user'),
-      token: PrefService.getString('pinboard_token'),
-    );
-    final bookmarks = PinboardBookmarks(
-      username: PrefService.getString('pinboard_user'),
-      token: PrefService.getString('pinboard_token'),
-      cacheDir: notesDir,
-    );
-    final appState = AppState(localStore, bookmarks);
-    appState.loadBookmarks();
-    return _MainPageState._(appState);
-  }
+  AppState appState;
 
   @override
   void initState() {
     super.initState();
     _windowInfo();
     setWindowFrame(Rect.fromLTRB(1139.0, 517.0, 1861.0, 1125.0));
+
+    final prefs = context.read<Preferences>();
+    final notesDir = Directory(prefs.docsDir);
+    final localStore = LocalDirNoteStore(notesDir: notesDir);
+    // Cant use pinboard for notes for now due to missing APIs
+    // final pinboardStore = PinboardNoteStore(
+    //   username: prefs.pinboardUser,
+    //   token: prefs.pinboardToken,
+    // );
+    final bookmarks = PinboardBookmarks(
+      username: PrefService.getString('pinboard_user'),
+      token: PrefService.getString('pinboard_token'),
+      cacheDir: notesDir,
+    );
+    appState = AppState(localStore, bookmarks);
+    appState.loadBookmarks();
   }
 
   @override
