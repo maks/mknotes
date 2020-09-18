@@ -15,11 +15,17 @@ class AppState extends ChangeNotifier {
   final NoteStore _store;
   String _currentSearchTerm;
 
+  // tricky stuff here. Because _store & _bookmarks.items are actually streams
+  // of LISTs of items, not streams of items, we need use combine rx operator
+  // to get the latest list from each stream and then merge the 2 lists together
+  // using the list spread operator
   Stream<List<ReferenceItem>> get allItems =>
       Rx.combineLatest2<List<Note>, List<Bookmark>, List<ReferenceItem>>(
         _store.items,
         _bookmarks.items,
-        (a, b) => <ReferenceItem>[...a, ...b],
+        (a, b) => <ReferenceItem>[...a, ...b]..sort(
+            (c, d) => c.title.compareTo(d.title),
+          ),
       );
 
   ReferenceItem get current => _current;
