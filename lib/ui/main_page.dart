@@ -8,7 +8,6 @@ import 'package:mknotes/bl/reference_item.dart';
 import 'package:mknotes/bl/localdir_note_store.dart';
 import 'package:preferences/preference_service.dart';
 import 'package:provider/provider.dart';
-import 'package:window_size/window_size.dart';
 
 import '../logging.dart';
 import 'split_screen.dart';
@@ -28,8 +27,6 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    _windowInfo();
-    setWindowFrame(Rect.fromLTRB(1139.0, 517.0, 1861.0, 1125.0));
 
     final prefs = context.read<Preferences>();
     final notesDir = Directory(prefs.docsDir);
@@ -97,11 +94,6 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       appState.current = selected;
     });
-  }
-
-  void _windowInfo() async {
-    final window = await getWindowInfo();
-    Log().debug("initial window size: ${window.frame}");
   }
 }
 
