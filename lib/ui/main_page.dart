@@ -1,13 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:mknotes/bl/app_state.dart';
-import 'package:mknotes/bl/pinboard_bookmarks.dart';
-import 'package:mknotes/bl/preferences.dart';
-import 'package:mknotes/bl/reference_item.dart';
-import 'package:mknotes/bl/localdir_note_store.dart';
-import 'package:preferences/preference_service.dart';
 import 'package:provider/provider.dart';
+
+import '../bl/app_state.dart';
+import '../bl/reference_item.dart';
 
 import '../logging.dart';
 import 'split_screen.dart';
@@ -22,81 +17,55 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  AppState appState;
-
-  @override
-  void initState() {
-    super.initState();
-
-    final prefs = context.read<Preferences>();
-    final notesDir = Directory(prefs.docsDir);
-    final localStore = LocalDirNoteStore(notesDir: notesDir);
-    // Cant use pinboard for notes for now due to missing APIs
-    // final pinboardStore = PinboardNoteStore(
-    //   username: prefs.pinboardUser,
-    //   token: prefs.pinboardToken,
-    // );
-    final bookmarks = PinboardBookmarks(
-      username: prefs.pinboardUser,
-      token: prefs.pinboardToken,
-      cacheDir: notesDir,
-    );
-    appState = AppState(localStore, bookmarks);
-    appState.loadBookmarks();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: appState,
-      builder: (BuildContext context, _) => Scaffold(
-        appBar: AppBar(
-          title: NoteTitle(
-            title: (appState.current?.title ?? widget.title),
-            editable: context.watch<AppState>().edit,
-            onChanged: (text) =>
-                context.read<AppState>().updateCurrentTitle(text),
-          ),
-          actions: [
-            if (context.watch<AppState>().edit)
-              IconButton(
-                icon: Icon(Icons.save),
-                onPressed: appState.toggleEdit,
-              )
-            else
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: appState.toggleEdit,
-              ),
+    final AppState appState = context.watch<AppState>();
+    return Scaffold(
+      appBar: AppBar(
+        title: NoteTitle(
+          title: (appState.current?.title ?? widget.title),
+          editable: appState.edit,
+          onChanged: (text) => appState.updateCurrentTitle(text),
+        ),
+        actions: [
+          if (appState.edit)
             IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () => Navigator.pushNamed(context, "/settings"),
+              icon: Icon(Icons.save),
+              onPressed: appState.toggleEdit,
             )
-          ],
+          else
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: appState.toggleEdit,
+            ),
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () => Navigator.pushNamed(context, "/settings"),
+          )
+        ],
+      ),
+      body: Center(
+        child: SplitScreen(
+          itemsList: appState.allItems,
+          showItem: (item) => _showNote(item, appState),
         ),
-        body: Center(
-          child: SplitScreen(
-            itemsList: appState.allItems,
-            showItem: _showNote,
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _addNote,
-          tooltip: 'Add note',
-          child: Icon(Icons.add),
-        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _addNote(appState),
+        tooltip: 'Add note',
+        child: Icon(Icons.add),
       ),
     );
   }
 
-  void _addNote() {
-    appState.newNote();
+  void _addNote(AppState state) {
+    state.newNote();
   }
 
-  void _showNote(ReferenceItem selected) {
+  void _showNote(ReferenceItem selected, AppState state) {
     Log().debug('SHOW: ${selected.title}');
     setState(() {
-      appState.current = selected;
+      state.current = selected;
     });
   }
 }

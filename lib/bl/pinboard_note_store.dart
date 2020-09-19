@@ -23,27 +23,27 @@ class PinboardNoteStore implements NoteStore {
 
   @override
   void addNote(Note note) {
-    // TODO: implement addNote
+    throw UnimplementedError('implement addNote');
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    throw UnimplementedError('implement dispose');
   }
 
   @override
   void filter(Filter filter) {
-    // TODO: implement filter
+    throw UnimplementedError('implement filter');
   }
 
   @override
   void saveNote(Note note) {
-    // TODO: implement saveNote
+    throw UnimplementedError('implement saveNote');
   }
 
   @override
   void updateNote(Note old, Note nue) {
-    // TODO: implement updateNote
+    throw UnimplementedError('implement updateNote');
   }
 
   void _fetchNotes() async {

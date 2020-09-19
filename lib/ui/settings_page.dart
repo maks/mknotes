@@ -1,10 +1,10 @@
 import 'package:file_chooser/file_chooser.dart';
+import 'package:flutter/services.dart';
+import 'package:mknotes/bl/app_state.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:mknotes/bl/preferences.dart';
-import 'package:preferences/preference_title.dart';
-import 'package:preferences/preferences.dart';
-
-import '../logging.dart';
+import 'package:settings_ui/settings_ui.dart';
+import 'package:mknotes/extensions.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -14,53 +14,83 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    final path = PrefService.getString(DOCS_DIR_PREF);
-    print("P: $path");
+    final appState = context.watch<AppState>();
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            PreferenceTitle('General'),
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text("Notes Path: $path"),
-                  ),
+        child: SettingsList(
+          sections: [
+            SettingsSection(
+              title: "General",
+              tiles: [
+                SettingsTile(
+                  title: "Notes Path",
+                  subtitle: "${appState.notesDir}",
+                  onTap: () => _getNotesPath(appState),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: MaterialButton(
-                    child: Text("Browse..."),
-                    onPressed: () => _getNotesPath(''),
-                  ),
-                )
               ],
             ),
-            PreferenceTitle('Pinboard'),
-            TextFieldPreference(
-              'Token',
-              PINBOARD_TOKEN_PREF,
-            )
+            SettingsSection(
+              title: "Pinboard",
+              tiles: [
+                SettingsTile(
+                  title: "Token",
+                  subtitle: "[${appState.pinboardUserAndToken}]",
+                  leading: Icon(Icons.bookmark),
+                  onTap: () => _getToken(context, appState),
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  void _getNotesPath(String current) async {
+  void _getNotesPath(AppState state) async {
     final result = await showOpenPanel(
       canSelectDirectories: true,
-      initialDirectory: current,
+      initialDirectory: state.notesDir,
     );
-    Log().debug("path: ${result.paths[0]}");
-    await PrefService.setString(DOCS_DIR_PREF, result.paths[0]);
-    setState(() {});
+    if (!result.canceled) {
+      state.notesDir = result.paths[0];
+      setState(() {});
+    }
+  }
+
+  void _getToken(BuildContext context, AppState state) async {
+    final nuToken = await showDialog<String>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Token'),
+        content: TextField(
+          controller: TextEditingController()
+            ..text = state.pinboardUserAndToken,
+          decoration: InputDecoration(
+            hintText: 'user:token',
+            labelText: "Pinboard Token",
+          ),
+          maxLines: 1,
+          onSubmitted: (token) {
+            Navigator.pop(context, token);
+          },
+        ),
+        actions: [
+          FlatButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
+    if (nuToken.isNotNullOrEmpty) {
+      state.pinboardUserAndToken = nuToken;
+      setState(() {});
+    }
   }
 }

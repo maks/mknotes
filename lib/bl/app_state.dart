@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mknotes/bl/bookmark.dart';
 import 'package:mknotes/bl/pinboard_bookmarks.dart';
+import 'package:mknotes/bl/preferences.dart';
 import 'package:mknotes/bl/reference_item.dart';
 import 'package:rxdart/rxdart.dart';
 import 'filters.dart';
@@ -13,6 +14,7 @@ class AppState extends ChangeNotifier {
 
   final PinboardBookmarks _bookmarks;
   final NoteStore _store;
+  final Preferences prefs;
   String _currentSearchTerm;
 
   // tricky stuff here. Because _store & _bookmarks.items are actually streams
@@ -39,7 +41,21 @@ class AppState extends ChangeNotifier {
 
   bool get edit => _edit;
 
-  AppState(this._store, this._bookmarks);
+  String get notesDir => prefs.docsDir;
+
+  set notesDir(String dir) {
+    prefs.docsDir = dir;
+    notifyListeners();
+  }
+
+  String get pinboardUserAndToken => prefs.pinboardUserAndToken;
+
+  set pinboardUserAndToken(String token) {
+    prefs.pinboardUserAndToken = token;
+    notifyListeners();
+  }
+
+  AppState(this._store, this._bookmarks, this.prefs);
 
   void toggleEdit() {
     if (edit) {
