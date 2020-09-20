@@ -10,6 +10,7 @@ import 'bl/app_state.dart';
 import 'bl/localdir_note_store.dart';
 import 'bl/pinboard_bookmarks.dart';
 import 'bl/preferences.dart';
+import 'extensions.dart';
 import 'logging.dart';
 import 'ui/main_page.dart';
 
@@ -48,13 +49,17 @@ class MyApp extends StatelessWidget {
     //   username: prefs.pinboardUser,
     //   token: prefs.pinboardToken,
     // );
-    final bookmarks = PinboardBookmarks(
-      username: prefs.pinboardUser,
-      token: prefs.pinboardToken,
-      cacheDir: notesDir,
-    );
+    final bookmarks = prefs.usePinboard
+        ? PinboardBookmarks(
+            username: prefs.pinboardUser,
+            token: prefs.pinboardToken,
+            cacheDir: notesDir,
+          )
+        : null;
     final appState = AppState(localStore, bookmarks, prefs);
-    appState.loadBookmarks();
+    if (bookmarks.isNotNull) {
+      appState.loadBookmarks();
+    }
 
     return ChangeNotifierProvider.value(
       value: appState,

@@ -4,6 +4,8 @@ import 'package:mknotes/bl/pinboard_bookmarks.dart';
 import 'package:mknotes/bl/preferences.dart';
 import 'package:mknotes/bl/reference_item.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../extensions.dart';
 import 'filters.dart';
 import 'note.dart';
 import 'note_store.dart';
@@ -21,14 +23,15 @@ class AppState extends ChangeNotifier {
   // of LISTs of items, not streams of items, we need use combine rx operator
   // to get the latest list from each stream and then merge the 2 lists together
   // using the list spread operator
-  Stream<List<ReferenceItem>> get allItems =>
-      Rx.combineLatest2<List<Note>, List<Bookmark>, List<ReferenceItem>>(
-        _store.items,
-        _bookmarks.items,
-        (a, b) => <ReferenceItem>[...a, ...b]..sort(
-            (c, d) => c.title.compareTo(d.title),
-          ),
-      );
+  Stream<List<ReferenceItem>> get allItems => _bookmarks.isNotNull
+      ? Rx.combineLatest2<List<Note>, List<Bookmark>, List<ReferenceItem>>(
+          _store.items,
+          _bookmarks.items,
+          (a, b) => <ReferenceItem>[...a, ...b]..sort(
+              (c, d) => c.title.compareTo(d.title),
+            ),
+        )
+      : _store.items;
 
   ReferenceItem get current => _current;
 

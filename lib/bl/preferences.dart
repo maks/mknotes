@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import '../extensions.dart';
 
 const String _DOCS_DIR_PREF = "docs_dir";
 const String _PINBOARD_TOKEN_PREF = "pinboard_token";
@@ -17,6 +18,9 @@ class Preferences {
       _safeSplit(prefs.getString(_PINBOARD_TOKEN_PREF), ":", 1);
   set pinboardUserAndToken(String token) =>
       prefs.setString(_PINBOARD_TOKEN_PREF, token);
+
+  bool get usePinboard =>
+      prefs.getString(_PINBOARD_TOKEN_PREF)?.isNotNullOrEmpty;
 
   String _safeSplit(String s, String splitOn, int part) {
     final r = s?.split(splitOn);
