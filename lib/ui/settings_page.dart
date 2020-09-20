@@ -1,5 +1,4 @@
 import 'package:file_chooser/file_chooser.dart';
-import 'package:flutter/services.dart';
 import 'package:mknotes/bl/app_state.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
