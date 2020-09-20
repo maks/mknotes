@@ -93,7 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ],
       ),
     );
-    if (nuToken.isNotNullOrEmpty) {
+    if (nuToken.isNotNull) {
       state.pinboardUserAndToken = nuToken;
       setState(() {});
     }
