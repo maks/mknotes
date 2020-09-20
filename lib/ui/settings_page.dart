@@ -39,7 +39,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: "Token",
                   subtitle: "[${appState.pinboardUserAndToken}]",
                   leading: Icon(Icons.bookmark),
-                  onTap: () => _getToken(context, appState),
+                  onTap: () => _showTokenEntryDialog(context, appState),
                 ),
               ],
             ),
@@ -60,14 +60,14 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
-  void _getToken(BuildContext context, AppState state) async {
+  void _showTokenEntryDialog(BuildContext context, AppState state) async {
+    final textController = TextEditingController();
     final nuToken = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
         title: Text('Token'),
         content: TextField(
-          controller: TextEditingController()
-            ..text = state.pinboardUserAndToken,
+          controller: textController..text = state.pinboardUserAndToken,
           decoration: InputDecoration(
             hintText: 'user:token',
             labelText: "Pinboard Token",
@@ -82,6 +82,12 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Text("Cancel"),
             onPressed: () {
               Navigator.of(context).pop();
+            },
+          ),
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context, textController.text);
             },
           ),
         ],
