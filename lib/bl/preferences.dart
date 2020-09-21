@@ -20,7 +20,7 @@ class Preferences {
       prefs.setString(_PINBOARD_TOKEN_PREF, token);
 
   bool get usePinboard =>
-      prefs.getString(_PINBOARD_TOKEN_PREF)?.isNotNullOrEmpty;
+      prefs.getString(_PINBOARD_TOKEN_PREF)?.isNotNullOrEmpty ?? false;
 
   String _safeSplit(String s, String splitOn, int part) {
     final r = s?.split(splitOn);
