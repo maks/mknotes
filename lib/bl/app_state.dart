@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mknotes/bl/bookmark.dart';
 import 'package:mknotes/bl/pinboard_bookmarks.dart';
@@ -14,7 +16,7 @@ class AppState extends ChangeNotifier {
   ReferenceItem _current;
   bool _edit = false;
 
-  final PinboardBookmarks _bookmarks;
+  PinboardBookmarks _bookmarks;
   final NoteStore _store;
   final Preferences prefs;
   String _currentSearchTerm;
@@ -56,6 +58,14 @@ class AppState extends ChangeNotifier {
   set pinboardUserAndToken(String token) {
     prefs.pinboardUserAndToken = token;
     notifyListeners();
+    if (token.isNotBlank) {
+      _bookmarks = PinboardBookmarks(
+        username: prefs.pinboardUser,
+        token: prefs.pinboardToken,
+        cacheDir: Directory(notesDir),
+      );
+      _bookmarks.load();
+    }
   }
 
   AppState(this._store, this._bookmarks, this.prefs);
