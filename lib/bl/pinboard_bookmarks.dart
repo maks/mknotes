@@ -44,15 +44,32 @@ class PinboardBookmarks {
   }
 
   void load() async {
+    final lastBookmarkUpdate =
+        File(path.join(_bookmarksCache.parent.path, '.update_ts'));
     if (await haveLocalCache) {
       await _loadBookmarksFromFile();
+      final ts = await lastBookmarkUpdate.readAsString();
+      final update = await pbClient.posts.update();
+      final lastCacheUpdate =
+          DateTime.fromMillisecondsSinceEpoch(int.parse(ts)).toUtc();
+      print(
+          'last bookmark update: ${update.update_time}, lastcache: ${lastCacheUpdate}');
+      if (update.update_time.isAfter(lastCacheUpdate)) {
+        await _cacheAllBookmarks(lastBookmarkUpdate);
+      }
     } else {
-      final bookmarks = await _fetchAllBookmarks();
-      await _bookmarksCache.writeAsString(
-        jsonEncode(bookmarks.toList()),
-        flush: true,
-      );
+      await _cacheAllBookmarks(lastBookmarkUpdate);
     }
+  }
+
+  Future<void> _cacheAllBookmarks(File lastUpdate) async {
+    final bookmarks = await _fetchAllBookmarks();
+    await _bookmarksCache.writeAsString(
+      jsonEncode(bookmarks.toList()),
+      flush: true,
+    );
+    await lastUpdate
+        .writeAsString("${DateTime.now().toUtc().millisecondsSinceEpoch}");
   }
 
   Future<void> _loadBookmarksFromFile() async {
@@ -66,8 +83,8 @@ class PinboardBookmarks {
   }
 
   Future<Set<Bookmark>> _fetchAllBookmarks() async {
-    final pbResponse = await pbClient.posts.recent(count: 10); //all();
-    final Set<Bookmark> fullBookmarkList = pbResponse.posts
+    final posts = await pbClient.posts.all();
+    final Set<Bookmark> fullBookmarkList = posts
         .map((p) => Bookmark(
               id: p.hash,
               title: p.description,
