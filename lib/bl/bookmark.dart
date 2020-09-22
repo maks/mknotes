@@ -55,8 +55,9 @@ class Bookmark implements ReferenceItem {
       'href': url,
       'description': title,
       'extended': content,
-      'time': timestamp?.millisecondsSinceEpoch,
-      'tags': tags,
+      'time': timestamp?.toIso8601String(),
+      'tags': tags.join(
+          " "), // keep as same space seperated list format as Pinboard does
     };
   }
 

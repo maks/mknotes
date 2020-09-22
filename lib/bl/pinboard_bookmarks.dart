@@ -19,8 +19,8 @@ Future<Set<Bookmark>> parseBookmarksJson(String json) async {
   final List<dynamic> parsed = jsonDecode(json) as List<dynamic>;
 
   return Future.value(parsed
-      .map<Bookmark>((dynamic jsonMap) =>
-          Bookmark.fromMap(jsonMap as Map<String, dynamic>))
+      .map<Bookmark>(
+          (dynamic jsonText) => Bookmark.fromJson(jsonText as String))
       .toSet());
 }
 
@@ -47,7 +47,11 @@ class PinboardBookmarks {
     if (await haveLocalCache) {
       await _loadBookmarksFromFile();
     } else {
-      _fetchAllBookmarks();
+      final bookmarks = await _fetchAllBookmarks();
+      await _bookmarksCache.writeAsString(
+        jsonEncode(bookmarks.toList()),
+        flush: true,
+      );
     }
   }
 
@@ -61,9 +65,9 @@ class PinboardBookmarks {
     __bookmarksListStream.add(bookmarks);
   }
 
-  void _fetchAllBookmarks() async {
+  Future<Set<Bookmark>> _fetchAllBookmarks() async {
     final pbResponse = await pbClient.posts.recent(count: 10); //all();
-    final Set<Bookmark> _fullBookmarkList = pbResponse.posts
+    final Set<Bookmark> fullBookmarkList = pbResponse.posts
         .map((p) => Bookmark(
               id: p.hash,
               title: p.description,
@@ -73,6 +77,7 @@ class PinboardBookmarks {
               tags: p.tags,
             ))
         .toSet();
-    __bookmarksListStream.add(_fullBookmarkList);
+    __bookmarksListStream.add(fullBookmarkList);
+    return fullBookmarkList;
   }
 }
