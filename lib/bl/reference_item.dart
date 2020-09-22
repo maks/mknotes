@@ -5,6 +5,7 @@ abstract class ReferenceItem {
   List<String> get tags;
   String get content;
   bool get isUntitled;
+  String get id;
 
   ReferenceItem copyWith({
     String content,

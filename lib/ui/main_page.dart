@@ -1,12 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:mknotes/bl/app_state.dart';
-import 'package:mknotes/bl/item.dart';
-import 'package:mknotes/bl/localdir_note_store.dart';
-import 'package:mknotes/bl/note_store.dart';
 import 'package:provider/provider.dart';
-import 'package:window_size/window_size.dart';
+
+import '../bl/app_state.dart';
+import '../bl/reference_item.dart';
 
 import '../logging.dart';
 import 'split_screen.dart';
@@ -21,79 +17,56 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final NoteStore _noteStore;
-  final AppState appState;
-
-  // need to use factory constructor trick to initialise dependent finals
-  // ref: https://stackoverflow.com/a/52964776/85472
-  _MainPageState._(this._noteStore, this.appState);
-
-  factory _MainPageState() {
-    final store = LocalDirNoteStore(notesDir: Directory('./docs'));
-    return _MainPageState._(store, AppState(store));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _windowInfo();
-    setWindowFrame(Rect.fromLTRB(1139.0, 517.0, 1861.0, 1125.0));
-  }
-
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: appState,
-      builder: (BuildContext context, _) => Scaffold(
-        appBar: AppBar(
-          title: NoteTitle(
-            title: (appState.current?.title ?? widget.title),
-            editable: context.watch<AppState>().edit,
-            onChanged: (text) =>
-                context.read<AppState>().updateCurrentTitle(text),
-          ),
-          actions: [
-            if (context.watch<AppState>().edit)
-              IconButton(
-                icon: Icon(Icons.save),
-                onPressed: appState.toggleEdit,
-              )
-            else
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: appState.toggleEdit,
-              )
-          ],
+    final AppState appState = context.watch<AppState>();
+    return Scaffold(
+      appBar: AppBar(
+        title: NoteTitle(
+          title: (appState.current?.title ?? widget.title),
+          editable: appState.edit,
+          onChanged: (text) => appState.updateCurrentTitle(text),
         ),
-        body: Center(
-          child: SplitScreen(
-            noteStore: _noteStore,
-            showItem: _showNote,
-          ),
+        actions: [
+          if (appState.edit)
+            IconButton(
+              icon: Icon(Icons.save),
+              onPressed: appState.toggleEdit,
+            )
+          else
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: appState.toggleEdit,
+            ),
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () => Navigator.pushNamed(context, "/settings"),
+          )
+        ],
+      ),
+      body: Center(
+        child: SplitScreen(
+          itemsList: appState.allItems,
+          showItem: (item) => _showNote(item, appState),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _addNote,
-          tooltip: 'Add note',
-          child: Icon(Icons.add),
-        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _addNote(appState),
+        tooltip: 'Add note',
+        child: Icon(Icons.add),
       ),
     );
   }
 
-  void _addNote() {
-    appState.newNote();
+  void _addNote(AppState state) {
+    state.newNote();
   }
 
-  void _showNote(ReferenceItem selected) {
+  void _showNote(ReferenceItem selected, AppState state) {
     Log().debug('SHOW: ${selected.title}');
     setState(() {
-      appState.current = selected;
+      state.current = selected;
     });
-  }
-
-  void _windowInfo() async {
-    final window = await getWindowInfo();
-    Log().debug("initial window size: ${window.frame}");
   }
 }
 

@@ -4,8 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:front_matter/front_matter.dart' as fm;
 import 'package:meta/meta.dart';
-import 'package:mknotes/bl/bookmark.dart';
-import 'package:mknotes/bl/item.dart';
+import 'package:mknotes/bl/pinboard_bookmarks.dart';
 import 'package:path/path.dart' as path;
 import 'package:rxdart/rxdart.dart';
 import 'package:yaml/yaml.dart' as yaml;
@@ -16,33 +15,13 @@ import 'filters.dart';
 import 'note.dart';
 import 'note_store.dart';
 
-Future<List<Bookmark>> readBookmarksFile(String notespath) async {
-  final File bookmarksfile = File(path.join(notespath, '.bookmarks'));
-  if (bookmarksfile.existsSync()) {
-    final bookmarksJson = await bookmarksfile.readAsString();
-
-    final bookmarks = await parseBookmarksJson(bookmarksJson);
-    return bookmarks;
-  }
-  return [];
-}
-
-Future<List<Bookmark>> parseBookmarksJson(String json) async {
-  final List<dynamic> parsed = jsonDecode(json) as List<dynamic>;
-
-  return Future.value(parsed
-      .map<Bookmark>((dynamic jsonMap) =>
-          Bookmark.fromMap(jsonMap as Map<String, dynamic>))
-      .toList());
-}
-
-/// Interface for Stores that provide access to notes.
+/// Local file based store
 class LocalDirNoteStore implements NoteStore {
   final Directory notesDir;
-  final _notesListStream = BehaviorSubject<Set<ReferenceItem>>();
-  final Set<ReferenceItem> _fullList = {};
+  final _notesListStream = BehaviorSubject<Set<Note>>();
+  final Set<Note> _fullList = {};
 
-  LocalDirNoteStore({@required this.notesDir}) {
+  LocalDirNoteStore({@required this.notesDir, PinboardBookmarks bookmarks}) {
     final notesListStream = notesDir.list();
 
     notesListStream
@@ -57,24 +36,11 @@ class LocalDirNoteStore implements NoteStore {
         _notesListStream.add(_fullList);
       },
     );
-
-    _loadBookmarks();
-  }
-
-  Future<void> _loadBookmarks() async {
-    Log().debug('loading bookmarks...');
-    final stopwatch = Stopwatch()..start();
-    final bookmarks = await compute(readBookmarksFile, notesDir.path);
-
-    Log().debug(
-        'loaded ${bookmarks.length} bookmarks in ${stopwatch.elapsed.inMilliseconds}ms');
-    _fullList.addAll(bookmarks);
-    _notesListStream.add(_fullList);
   }
 
   @override
-  Stream<List<ReferenceItem>> get items =>
-      _notesListStream.map((s) => s.toList());
+  Stream<List<Note>> get items =>
+      _notesListStream.stream.map((s) => s.toList());
 
   Future<String> _safeReadFile(File f) async {
     String result;
@@ -142,14 +108,14 @@ class LocalDirNoteStore implements NoteStore {
       final fmDoc = fm.parse(content);
 
       return Note(
-        filename: filename,
+        id: filename,
         title: fmDoc.getData('title') as String ?? title,
         content: fmDoc.content,
         tags: _asStringList(fmDoc.getData('tags')) ?? [],
       );
     } else {
       return Note(
-        filename: filename,
+        id: filename,
         title: title,
         content: content,
       );

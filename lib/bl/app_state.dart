@@ -1,5 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:mknotes/bl/item.dart';
+import 'package:mknotes/bl/bookmark.dart';
+import 'package:mknotes/bl/pinboard_bookmarks.dart';
+import 'package:mknotes/bl/preferences.dart';
+import 'package:mknotes/bl/reference_item.dart';
+import 'package:rxdart/rxdart.dart';
+
+import '../extensions.dart';
 import 'filters.dart';
 import 'note.dart';
 import 'note_store.dart';
@@ -7,8 +15,25 @@ import 'note_store.dart';
 class AppState extends ChangeNotifier {
   ReferenceItem _current;
   bool _edit = false;
-  final NoteStore store;
+
+  PinboardBookmarks _bookmarks;
+  final NoteStore _store;
+  final Preferences prefs;
   String _currentSearchTerm;
+
+  // tricky stuff here. Because _store & _bookmarks.items are actually streams
+  // of LISTs of items, not streams of items, we need use combine rx operator
+  // to get the latest list from each stream and then merge the 2 lists together
+  // using the list spread operator
+  Stream<List<ReferenceItem>> get allItems => _bookmarks.isNotNull
+      ? Rx.combineLatest2<List<Note>, List<Bookmark>, List<ReferenceItem>>(
+          _store.items,
+          _bookmarks.items,
+          (a, b) => <ReferenceItem>[...a, ...b]..sort(
+              (c, d) => c.title.compareTo(d.title),
+            ),
+        )
+      : _store.items;
 
   ReferenceItem get current => _current;
 
@@ -21,7 +46,29 @@ class AppState extends ChangeNotifier {
 
   bool get edit => _edit;
 
-  AppState(this.store);
+  String get notesDir => prefs.docsDir;
+
+  set notesDir(String dir) {
+    prefs.docsDir = dir;
+    notifyListeners();
+  }
+
+  String get pinboardUserAndToken => prefs.pinboardUserAndToken;
+
+  set pinboardUserAndToken(String token) {
+    prefs.pinboardUserAndToken = token;
+    notifyListeners();
+    if (token.isNotBlank) {
+      _bookmarks = PinboardBookmarks(
+        username: prefs.pinboardUser,
+        token: prefs.pinboardToken,
+        cacheDir: Directory(notesDir),
+      );
+      _bookmarks.load();
+    }
+  }
+
+  AppState(this._store, this._bookmarks, this.prefs);
 
   void toggleEdit() {
     if (edit) {
@@ -43,7 +90,7 @@ class AppState extends ChangeNotifier {
       final Note _curr = _current as Note;
       final Note old = _curr;
       _current = _curr.copyWith(content: text);
-      store.updateNote(old, _current as Note);
+      _store.updateNote(old, _current as Note);
     }
   }
 
@@ -52,7 +99,7 @@ class AppState extends ChangeNotifier {
       final Note _curr = _current as Note;
       final old = _curr;
       _current = _curr.copyWith(title: title);
-      store.updateNote(old, _current as Note);
+      _store.updateNote(old, _current as Note);
     }
   }
 
@@ -61,7 +108,7 @@ class AppState extends ChangeNotifier {
     final updatedTags = _current.tags..remove(tag);
     _current = _current.copyWith(tags: updatedTags);
     //FIXME: need to handle updating bookmarks as well later on
-    store.updateNote(old as Note, _current as Note);
+    _store.updateNote(old as Note, _current as Note);
     notifyListeners();
   }
 
@@ -70,18 +117,19 @@ class AppState extends ChangeNotifier {
     final updatedTags = _current.tags..add(tag);
     _current = _current.copyWith(tags: updatedTags);
     //FIXME: need to handle updating bookmarks as well later on
-    store.updateNote(old as Note, _current as Note);
+    _store.updateNote(old as Note, _current as Note);
     notifyListeners();
   }
 
   void search(String term) {
     _currentSearchTerm = term;
-    store.filter((term != null && term.isNotEmpty) ? SearchFilter(term) : null);
+    _store
+        .filter((term != null && term.isNotEmpty) ? SearchFilter(term) : null);
   }
 
   void newNote() {
     current = Note.untitled('new note');
-    store.addNote(current as Note);
+    _store.addNote(current as Note);
     _setEdit(true);
   }
 
@@ -91,6 +139,10 @@ class AppState extends ChangeNotifier {
   }
 
   void _saveCurrent() {
-    store.saveNote(_current as Note);
+    _store.saveNote(_current as Note);
+  }
+
+  void loadBookmarks() {
+    _bookmarks.load();
   }
 }

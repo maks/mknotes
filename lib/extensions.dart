@@ -1,3 +1,5 @@
+import 'dart:math' as m;
+
 import 'package:basics/basics.dart';
 import 'package:front_matter/front_matter.dart';
 
@@ -16,4 +18,8 @@ extension FrontMatterDocE on FrontMatterDocument {
 extension DateTimeExtension on DateTime {
   String get auFormat =>
       "${day.toString().padLeft(2, '0')}-${month.toString().padLeft(2, '0')}-${year}";
+}
+
+extension StringExtension on String {
+  String noMoreThan(int count) => substring(0, m.min(count, length));
 }

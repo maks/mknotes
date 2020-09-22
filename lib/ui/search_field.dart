@@ -8,9 +8,12 @@ class SearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: TextField(
-        autofocus: true,
         maxLines: 1,
-        decoration: InputDecoration(hintText: 'search'),
+        decoration: InputDecoration(
+          hintText: 'search',
+          fillColor: Theme.of(context).accentColor,
+          filled: true,
+        ),
         onSubmitted: (text) => context.read<AppState>().search(text),
       ),
     );

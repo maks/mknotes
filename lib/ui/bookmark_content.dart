@@ -49,7 +49,7 @@ class BookmarkContent extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16),
-              child: Text("Date: ${bookmark.timestamp.auFormat}"),
+              child: Text("Date: ${bookmark.timestamp?.auFormat}"),
             ),
             Spacer(),
           ],

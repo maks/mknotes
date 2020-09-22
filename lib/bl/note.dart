@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:meta/meta.dart';
-import 'package:mknotes/bl/item.dart';
+import 'package:mknotes/bl/reference_item.dart';
 
 class Note implements ReferenceItem {
   final String _title;
@@ -10,6 +10,8 @@ class Note implements ReferenceItem {
   final String content;
   @override
   final List<String> tags;
+  @override
+  final String id;
 
   @override
   bool get isUntitled => _title == UNTITLED || _filename == "$UNTITLED.md";
@@ -23,15 +25,15 @@ class Note implements ReferenceItem {
       _filename ?? "${_titleFromText(title).replaceAll(' ', '_')}.md";
 
   Note({
-    String filename,
+    @required this.id,
     @required this.content,
     @required String title,
     this.tags = const <String>[],
   })  : _title = _titleFromText(title),
-        _filename = filename;
+        _filename = id;
 
   factory Note.untitled(String content) {
-    return Note(content: content, title: UNTITLED);
+    return Note(content: content, title: UNTITLED, id: null);
   }
 
   @override
@@ -43,7 +45,7 @@ class Note implements ReferenceItem {
     List<String> tags,
   }) {
     return Note(
-      filename: filename ?? _filename,
+      id: filename ?? _filename,
       title: title ?? this.title,
       content: content ?? this.content,
       tags: tags ?? this.tags,
