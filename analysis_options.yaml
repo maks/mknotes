@@ -1,0 +1,16 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+  exclude:
+    - archive/  
+
+linter:
+  rules:
+    prefer_relative_imports: true
+    directives_ordering: true
+    unawaited_futures: true
+    prefer_final_locals: true
+    prefer_final_in_for_each: true   
