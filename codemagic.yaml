@@ -3,7 +3,7 @@
 
 workflows:
   default-workflow:
-    name: Default Workflow
+    name: PR Workflow
     instance_type: mac_mini_m1
     max_build_duration: 30
     environment:
@@ -14,13 +14,12 @@ workflows:
       cache_paths: []
     triggering:
       events:
-        - push
         - pull_request
       branch_patterns:
         - pattern: '*'
           include: true
           source: true
-        - pattern: master
+        - pattern: main
           include: false
           source: true
       tag_patterns:
@@ -64,10 +63,10 @@ workflows:
       email:
         recipients:
           - maks@manichord.com
-  master-workflow-:
-    name: 'master Workflow '
-    instance_type: mac_mini
-    max_build_duration: 45
+  main-workflow-:
+    name: 'Main Workflow '
+    instance_type: mac_mini_m1
+    max_build_duration: 30
     environment:
       flutter: master
       xcode: latest
@@ -78,7 +77,7 @@ workflows:
       events:
         - push
       branch_patterns:
-        - pattern: master
+        - pattern: main
           include: true
           source: true
       tag_patterns:
@@ -93,4 +92,4 @@ workflows:
     publishing:
       email:
         recipients:
-          - maks@manichord.com
+          - ci@manichord.com
