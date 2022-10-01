@@ -1,22 +1,17 @@
-include: package:pedantic/analysis_options.yaml
+include: package:flutter_lints/flutter.yaml
 
 analyzer:
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
-
+  exclude:
+    - lib/models/*freezed.dart
+    - lib/models/*g.dart
 
 linter:
   rules:
-    always_put_control_body_on_new_line: true
-    curly_braces_in_flow_control_structures: true
-    unnecessary_new: true
-    avoid_relative_lib_imports: true
+    prefer_relative_imports: true
     directives_ordering: true
-    file_names: true
-    prefer_collection_literals: true
-    prefer_single_quotes: false
-    prefer_final_fields: true
+    unawaited_futures: true
     prefer_final_locals: true
-    annotate_overrides: true
-    omit_local_variable_types: false
+    prefer_final_in_for_each: true   
