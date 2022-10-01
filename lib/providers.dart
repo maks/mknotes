@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'currentNoteModel.dart';
+import 'current_note_model.dart';
 import 'datastores/datastore.dart';
 import 'models/note.dart';
 
