@@ -5,7 +5,8 @@ analyzer:
     implicit-casts: false
     implicit-dynamic: false
   exclude:
-    - archive/  
+    - lib/models/*freezed.dart
+    - lib/models/*g.dart
 
 linter:
   rules:
